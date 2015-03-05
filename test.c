@@ -1,9 +1,23 @@
+#include <setjmp.h>
 #include <stdio.h>
-#include <time.h>
+
+jmp_buf buf;
+
+void
+banana(){
+    printf("in banana()\n");
+    longjmp(buf, 1);
+    /*NOT REACHED */
+    printf("you'll never see this");
+}
 
 int
 main(void){
-    printf("The sizeof(time_t) is %d\n", sizeof(time_t));
-    time_t t = (1 << 32);
-    printf("t = %d\n", t);
+    if(setjmp(buf))
+        printf("back in main\n");
+    else {
+        printf("first time through\n");
+        banana();
+    }
+    return 0;
 }
