@@ -18,7 +18,7 @@ taken almost verbatim from the references.
 * [Concatenating string literals](#concatenating-string-literals)
 * [Iterating over lists](#iterating-over-lists)
 * [Never use gets()](#never-use-gets)
-* [Unions for different interpretations of the same data]
+* [Unions for different interpretations of the same data](#unions-for-different-interpretations-of-the-same-data)
 * [Testing for null pointers](testing-for-null-pointers)
 * [Enums vs #defines](#enums-vs-defines)
 * [References](#references)
@@ -51,7 +51,7 @@ Programmers are often encouraged to use long variable names regardless of contex
 That is a mistake: clarity is often achieved through brevity.
 
 #### Macros
-Avoid function macros: one serious problem with them is that if a
+**Avoid function macros**: one serious problem with them is that if a
 parameter appears more than once in the definition, and the argument used
 includes an expression with side effects, those side effects occur more than
 once, resulting in a subtle bug.
@@ -135,7 +135,9 @@ code adjusts automatically and is still correct.
 * If the name of p changes, the compiler will most likely detect the error.
 
 #### Function prototypes
-Even though parameter names are optional in a function prototype, well-chosen names
+The purpose of ANSI C prototypes is to reduce mismatches between formal and
+actual parameter types, making C a more reliable language.
+Even though parameter names are optional in function prototypes, well-chosen names
 are good documentation, so remember to use them.
 
 #### Concatenating string literals
