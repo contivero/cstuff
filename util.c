@@ -5,22 +5,22 @@
 
 void *
 xmalloc(size_t size) {
-    void *p = malloc(size);
+	void *p = malloc(size);
 
-    if(!p)
-        die("Out of memory: could not malloc() %d bytes\n", size);
+	if(!p)
+		die("Out of memory: could not malloc() %d bytes\n", size);
 
-    return p;
+	return p;
 }
 
 void *
 xcalloc(size_t nmemb, size_t size) {
-    void *p = calloc(nmemb, size);
+	void *p = calloc(nmemb, size);
 
-    if(!p)
-        die("Out of memory: could not calloc() %d bytes\n", nmemb*size);
+	if(!p)
+		die("Out of memory: could not calloc() %d bytes\n", nmemb*size);
 
-    return p;
+	return p;
 }
 
 void *
@@ -33,12 +33,12 @@ xrealloc(void *p, size_t len) {
 
 void
 die(const char *errstr, ...) {
-    va_list ap;
+	va_list ap;
 
-    va_start(ap, errstr);
-    vfprintf(stderr, errstr, ap);
-    va_end(ap);
-    exit(EXIT_FAILURE);
+	va_start(ap, errstr);
+	vfprintf(stderr, errstr, ap);
+	va_end(ap);
+	exit(EXIT_FAILURE);
 }
 
 /* From "The Pragmatic Programmer", page 121
@@ -47,14 +47,14 @@ die(const char *errstr, ...) {
  * If it differs from the expected, print the file and
  * line where the error occurred, then exit
  */
-#define CHECK(LINE, EXPECTED_VALUE)     \
-  { int rc = LINE;                      \
-    if(rc != EXPECTED_VALUE)            \
-        ut_abort(__FILE__, __LINE__, #LINE, rc, EXPECTED_VALUE); }
+#define CHECK(LINE, EXPECTED_VALUE)	 \
+  { int rc = LINE;					  \
+	if(rc != EXPECTED_VALUE)			\
+		ut_abort(__FILE__, __LINE__, #LINE, rc, EXPECTED_VALUE); }
 
 void
 ut_abort(char *file, int ln, char *line, int rc, int exp){
-    fprintf(stderr, "%s line %d\n'%s': expected %d, got %d\n",
-                    file,    ln, line,          exp,    rc);
-    exit(EXIT_FAILURE);
+	fprintf(stderr, "%s line %d\n'%s': expected %d, got %d\n",
+					file,	ln, line,		  exp,	rc);
+	exit(EXIT_FAILURE);
 }

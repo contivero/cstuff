@@ -4,80 +4,80 @@
 
 typedef struct Node Node;
 struct Node {
-    queueElemT elem;
-    Node* next;
+	queueElemT elem;
+	Node *next;
 };
 
-static Node*
+static Node *
 newnode(queueElemT elem) {
-    Node* np = xmalloc(sizeof(*np));
+	Node *np = xmalloc(sizeof(*np));
 
-    np->elem = elem;
-    np->next = NULL;
-    return np;
+	np->elem = elem;
+	np->next = NULL;
+	return np;
 }
 
 struct Queue {
-    Node* head;
-    Node* tail;
+	Node *head;
+	Node *tail;
 };
 
 Queue*
 newqueue(void) {
-    Queue *qp = xmalloc(sizeof(*qp));
-    qp->head = NULL;
-    return qp;
+	Queue *qp = xmalloc(sizeof(*qp));
+	qp->head = NULL;
+	return qp;
 }
 
 void
 freequeue(Queue *q){
-    Node *np, *next;
+	Node *np, *next;
 
-    for(np = q->head; np != NULL; np = next){
-        next = np->next;
-        free(np);
-    }
-    free(q);
+	for(np = q->head; np != NULL; np = next){
+		next = np->next;
+		free(np);
+	}
+	free(q);
 }
 
 void
 enqueue(Queue *q, queueElemT element){
-    Node *np = newnode(element);
+	Node *np = newnode(element);
 
-    if(q->head == NULL)
-        q->head = np;
-    else
-        q->tail->next = np;
-    q->tail = np;
+	if(!q->head)
+		q->head = np;
+	else
+		q->tail->next = np;
+	q->tail = np;
 }
 
 queueElemT
-dequeue(Queue* q){
-    if(queueisempty(q))
-        die("Cannot dequeue from an empty queue");
+dequeue(Queue *q){
+	if(queueisempty(q))
+		die("Cannot dequeue from an empty queue");
 
-    Node* np = q->head;
-    q->head = q->head->next;
-    return np;
+	Node *np = q->head;
+	q->head  = q->head->next;
+	return np;
 }
 
 bool
-queueisempty(Queue* q){
-    return q->head == NULL;
+queueisempty(Queue *q){
+	return !q->head;
 }
 
 bool
-queueisfull(Queue* queue){
-    return false;
+queueisfull(Queue *q){
+	return false;
 }
 
 int
 queuelength(Queue *q){
-    Node *np;
-    int length = 0;
+	Node *np;
+	int length = 0;
 
-    for(np = q->head; np != NULL; np = np->next)
-        length++;
+	for(np = q->head; np; np = np->next)
+		length++;
 
-    return length;
+	return length;
 }

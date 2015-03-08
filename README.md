@@ -94,18 +94,6 @@ Still, lowercase function macros tend to be misleading, since it's easy to
 confuse them with a normal function, so it's better to stick to using uppercase
 for them.
 
-#### Constants to the left
-Since C accepts assignments inside if, for, and while statements, a not so
-uncommon source of bugs is mixing a comparison with an assignment:
-
-```C
-if(x = 0){...}
-```
-By keeping constants to the left, the compiler will catch erroneous assignments, and once fixed looks like:
-```C
-if(0 == x){...}
-```
-
 #### Allocating memory
 Avoid the following anti-idiom:
 ```C

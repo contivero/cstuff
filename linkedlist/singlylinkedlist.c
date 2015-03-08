@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <stdbool.h>
 #include "../util.h"
 #include "singlylinkedlist.h"
 
@@ -12,141 +11,131 @@
  * the next element.
  */
 
+/* node's data type */
+typedef int dataT;
+typedef struct Node Node;
+
 struct Node{
-    dataT data;
-    Node *next;
+	dataT data;
+	Node *next;
 };
 
 struct List{
-    Node* first;
-    Node* last;
-    long size;
+	Node* first;
+	Node* last;
+	long size;
 };
 
-Node*
-newnode(dataT data) {
-    Node* np = xmalloc(sizeof(*np));
+static Node* newnode(dataT data);
 
-    np->data = data;
-    np->next = NULL;
-    return np;
+static Node*
+newnode(dataT data) {
+	Node* np = xmalloc(sizeof(*np));
+
+	np->data = data;
+	np->next = NULL;
+	return np;
 }
 
 List*
 newlist(void) {
-    List* list  = xmalloc(sizeof(*list));
+	List* list  = xmalloc(sizeof(*list));
 
-    list->first = list->last = NULL;
-    list->size  = 0;
-    return list;
+	list->first = list->last = NULL;
+	list->size  = 0;
+	return list;
 }
 
 void
 freelist(List* list) {
-    Node* np;
+	Node* np;
 
-    if(list->first != NULL){
-        Node* next;
+	if(list->first != NULL){
+		Node* next;
 
-        for(np = list->first; np != NULL; np = next){
-            next = np->next;
-            free(np);
-        }
-    }
-    free(list);
+		for(np = list->first; np != NULL; np = next){
+			next = np->next;
+			free(np);
+		}
+	}
+	free(list);
 }
 
 /* O(1) */
 void
 insert(List* list, dataT data) {
-    Node* np = newnode(data);
+	Node* np = newnode(data);
 
-    if(list->first == NULL){
-        list->first = list->last = np;
-        list->size = 1;
-        return;
-    }
+	if(list->first == NULL){
+		list->first = list->last = np;
+		list->size = 1;
+		return;
+	}
 
-    list->last->next = np;
-    list->last = np;
-    list->size++;
+	list->last->next = np;
+	list->last = np;
+	list->size++;
 }
 
 /* O(1) */
 void
 insertfirst(List* list, dataT data){
-    Node* np = newnode(data);
+	Node* np = newnode(data);
 
-    if(list->first == NULL){
-        list->first = list->last = np;
-        list->size = 1;
-        return;
-    }
+	if(list->first == NULL){
+		list->first = list->last = np;
+		list->size = 1;
+		return;
+	}
 
-    np->next = list->first;
-    list->first = np;
-    list->size++;
+	np->next = list->first;
+	list->first = np;
+	list->size++;
 }
 
 /*
  * Depending on the data type, an equality function might be needed.
  * Worst case: O(n)
  */
-bool
+int
 delete(List* list, dataT data){
-    Node* np;
-    Node* prev;
+	Node* np;
+	Node* prev;
 
-    if(list == NULL)
-        return false;
+	if(list == NULL)
+		return false;
 
-    prev = list->first;
-    if(data == list->first->data){
-        list->first = list->first->next;
-        list->size--;
-        free(prev);
-        return true;
-    }
+	prev = list->first;
+	if(data == list->first->data){
+		list->first = list->first->next;
+		list->size--;
+		free(prev);
+		return true;
+	}
 
-    for(np = list->first->next; np != NULL; np = np->next){
-        if(data == np->data){
-            prev->next = np->next;
-            list->size--;
-            free(np);
-            return true;
-        }
-        prev = np;
-    }
-    return false;
+	for(np = list->first->next; np != NULL; np = np->next){
+		if(data == np->data){
+			prev->next = np->next;
+			list->size--;
+			free(np);
+			return true;
+		}
+		prev = np;
+	}
+	return false;
 }
 
 /*
  * Complexity: O(1)
  */
-bool
+int
 deletefirst(List* list){
-    Node* np;
+	Node* np;
 
-    if(list->first == NULL)
-        return false;
+	if(list->first == NULL)
+		return false;
 
-    np = list->first;
-    list->first = list->first->next;
-    free(np);
+	np = list->first;
+	list->first = list->first->next;
+	free(np);
 }
-
-/*
-dataT
-get(List* list, long index){
-    Node* np;
-    long i;
-
-    if(list->size < index)
-        return NULL;
-
-    for(i = 0; i < index; i++)
-        np = np->next;
-
-    return np->data;
-}
-*/
