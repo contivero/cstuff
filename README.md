@@ -12,15 +12,16 @@ taken almost verbatim from the references.
 ## Notes on C -  Idioms and conventions
 * [Names](#names)
 * [Macros](#macros)
-* [Constants to the left](#constants-to-the-left)
 * [Allocating memory](#allocating-memory)
 * [Function prototypes](#function-prototypes)
 * [Concatenating string literals](#concatenating-string-literals)
 * [Iterating over lists](#iterating-over-lists)
 * [Never use gets()](#never-use-gets)
 * [Unions for different interpretations of the same data](#unions-for-different-interpretations-of-the-same-data)
-* [Testing for null pointers](testing-for-null-pointers)
+* [Testing for null pointers](#testing-for-null-pointers)
 * [Enums vs #defines](#enums-vs-defines)
+* [Idiomatic variable names](#idiomatic-variable-names)
+* [Parenthesis on sizeof but not on return](#idiomatic-variable-names)
 * [References](#references)
 
 #### Names
@@ -54,7 +55,7 @@ That is a mistake: clarity is often achieved through brevity.
 **Avoid function macros**: one serious problem with them is that if a
 parameter appears more than once in the definition, and the argument used
 includes an expression with side effects, those side effects occur more than
-once, resulting in a subtle bug.
+once, resulting in a subtle bug:
 ```C
 #define islower(c) ((c) >= 'a' && <= 'z')
 ...
@@ -189,6 +190,21 @@ union bits32_tag {
 This provides a way to extract the full 32-bit value by doing `value.whole`, or
 the individual byte fields `value.byte.c0` and so on.
 
+#### Document intentional fallthroughs on cases
+Comment cases that fallthrough, so as to leave it explicit. Example:
+```C
+switch (argc) {
+case 2:
+        month = estrtonum(argv[0], 1, 12);
+        v++;
+case 1: /* fallthrough */
+        year = estrtonum(argv[0], 0, INT_MAX);
+        break;
+default:
+    usage();
+}
+```
+
 #### Enums vs #defines
 Use `enum` for semantically grouped values, #define otherwise.
 ```C
@@ -200,6 +216,58 @@ enum { NORTH, SOUTH, EAST, WEST };
 Enums have one advantage: their names usually persist through to the debugger,
 and can be used while debugging code; #defined names are typically discarded
 during compilation.
+
+### Idiomatic variable names
+```C
+struct passwd *pw;
+```
+### Parenthesis on sizeof but not on return
+I'll let Torvalds do the talking:
+> On Wed, Jul 11, 2012 at 1:14 AM, George Spelvin <linux@horizon.com> wrote:
+> >
+> > Huh.  I prefer sizeof without parens, like I prefer return without parens.
+> 
+> Umm. The two have *nothing* to do with each other.
+> 
+> > It actually annoys me when I see someone write
+> >
+> >         return(0);
+> 
+> Absolutely. Anybody who does that is just terminally confused.
+> "return()" is in no way a function.
+> 
+> But "sizeof()" really *is* a function. It acts exactly like a function
+> of it's argument. There is no reason to not treat it that way. Sure,
+> the C standard *allows* you to not have parenthesis around an
+> expression argument, but you should treat that as the parsing oddity
+> it is, nothing more. There is zero reason not to have the parenthesis
+> there.
+> 
+> In contrast, "return" can never be part of an expression, and the
+> parenthesis never make any sense.
+> 
+> With "return", there's no precedence issues, for example.
+> 
+> With "sizeof()" there are: sizeof(x)+1 is very different from
+> sizeof(x+1), and having the parenthesis there make it clearer for
+> everybody (sure, you can write the first one as "sizeof x + 1", but
+> let's face it, the precedence is way more obvious if you just think of
+> sizeof as a function).
+> 
+> Here's an example of a really bad use of "sizeof" that doesn't have
+> the parenthesis around the argument: sizeof(*p)->member. Quite
+> frankly, if you do this, you should be shot. It makes people have to
+> parse the C precedence rules by hand. In contrast, parsing
+> sizeof((*p)->member) is *way* easier for humans.
+> 
+> And let's face it: if you write your code so that it's easy to parse
+> for a machine, and ignore how easy it is to parse for a human, I don't
+> want you writing kernel code. There's a reason we have the coding
+> standards. They aren't for the *compiler*. They are for *humans*.
+> 
+> And humans should think of sizeof() as a function, not as some
+> ass-backwards special case C parsing rule that is subtle as hell.
+>                   Linus
 
 ### References
 * Brian W. Kernighan and Dennis M. Ritchie, The C Programming Language
