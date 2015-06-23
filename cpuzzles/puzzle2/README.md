@@ -13,8 +13,7 @@ main(void){
 	return 0;
 }
 ```
-
->! Output is usually buffered by the system. Depending on how it works, simply
->! adding a newline character ('\n') at the end of the string should be sufficient to
->! flush the contents. Otherwise, you can call `fflush(stdout)` explicitely.
->! On the contrary, stderr tends not to be buffered, since you want to see errors immediately.
+Output is usually buffered by the system. Depending on how it works, simply
+adding a newline character ('\n') at the end of the string should be sufficient to
+flush the contents. Otherwise, you can call `fflush(stdout)` explicitely.
+On the contrary, stderr tends not to be buffered, since you want to see errors immediately.
