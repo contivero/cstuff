@@ -267,7 +267,6 @@ I'll let Torvalds do the talking:
 > 
 > And humans should think of sizeof() as a function, not as some
 > ass-backwards special case C parsing rule that is subtle as hell.
->                   Linus
 
 ### References
 * Brian W. Kernighan and Dennis M. Ritchie, The C Programming Language
