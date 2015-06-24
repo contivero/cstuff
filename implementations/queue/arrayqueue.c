@@ -49,7 +49,7 @@ queueisempty(Queue *q){
 
 bool
 queueisfull(Queue *q){
-	return (q->tail + 1) % QUEUE_ARRAY_SIZE == q->head;
+	return ((q->tail + 1) % QUEUE_ARRAY_SIZE) == q->head;
 }
 
 /* size of the queue added at the beginning to ensure that the left operand of

@@ -30,16 +30,16 @@ static Node* newnode(dataT data);
 
 static Node*
 newnode(dataT data) {
-	Node* np = xmalloc(sizeof(*np));
+	Node *np = xmalloc(sizeof(*np));
 
 	np->data = data;
 	np->next = NULL;
 	return np;
 }
 
-List*
+List *
 newlist(void) {
-	List* list  = xmalloc(sizeof(*list));
+	List *list  = xmalloc(sizeof(*list));
 
 	list->first = list->last = NULL;
 	list->size  = 0;
@@ -47,13 +47,12 @@ newlist(void) {
 }
 
 void
-freelist(List* list) {
-	Node* np;
+freelist(List *list) {
+	Node *np;
+	Node *next;
 
-	if(list->first != NULL){
-		Node* next;
-
-		for(np = list->first; np != NULL; np = next){
+	if(list->first){
+		for(np = list->first; np; np = next){
 			next = np->next;
 			free(np);
 		}
@@ -63,8 +62,8 @@ freelist(List* list) {
 
 /* O(1) */
 void
-insert(List* list, dataT data) {
-	Node* np = newnode(data);
+insert(List *list, dataT data) {
+	Node *np = newnode(data);
 
 	if(list->first == NULL){
 		list->first = list->last = np;
@@ -79,8 +78,8 @@ insert(List* list, dataT data) {
 
 /* O(1) */
 void
-insertfirst(List* list, dataT data){
-	Node* np = newnode(data);
+insertfirst(List *list, dataT data){
+	Node *np = newnode(data);
 
 	if(list->first == NULL){
 		list->first = list->last = np;
@@ -98,9 +97,9 @@ insertfirst(List* list, dataT data){
  * Worst case: O(n)
  */
 int
-delete(List* list, dataT data){
-	Node* np;
-	Node* prev;
+delete(List *list, dataT data){
+	Node *np;
+	Node *prev;
 
 	if(list == NULL)
 		return false;
@@ -113,7 +112,7 @@ delete(List* list, dataT data){
 		return true;
 	}
 
-	for(np = list->first->next; np != NULL; np = np->next){
+	for(np = list->first->next; np; np = np->next){
 		if(data == np->data){
 			prev->next = np->next;
 			list->size--;
@@ -129,8 +128,8 @@ delete(List* list, dataT data){
  * Complexity: O(1)
  */
 int
-deletefirst(List* list){
-	Node* np;
+deletefirst(List *list){
+	Node *np;
 
 	if(list->first == NULL)
 		return false;

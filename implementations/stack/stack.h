@@ -9,5 +9,3 @@ void   stackpush(Stack *stack, dataT data);
 dataT  stackpop(Stack *stack);
 dataT  stackpeek(Stack *stack);
 int    stackisempty(Stack *stack);
-
-#endif

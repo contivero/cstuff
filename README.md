@@ -1,7 +1,7 @@
 # cstuff
 Simple implementations of different algorithms and data structures in C, mainly
 as a personal reference. Mostly based on those found on Eric Robert's book
-"Programming abstractions in C".
+"Programming abstractions in C".  
 Whenever memory cannot be allocated, the implementations simply abort the program, so be careful
 in the cases such behavior is undesirable.
 
@@ -92,7 +92,7 @@ Yielding what we originally expected:
 y = 1 / ((a + b) * (a + b));
 ```
 Still, lowercase function macros tend to be misleading, since it's easy to
-confuse them with a normal function, so it's better to stick to using uppercase
+confuse them with a normal function, so it's better to stick to using uppercases
 for them.
 
 #### Allocating memory

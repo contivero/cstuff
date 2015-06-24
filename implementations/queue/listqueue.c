@@ -33,7 +33,7 @@ void
 freequeue(Queue *q){
 	Node *np, *next;
 
-	for(np = q->head; np != NULL; np = next){
+	for(np = q->head; np; np = next){
 		next = np->next;
 		free(np);
 	}
