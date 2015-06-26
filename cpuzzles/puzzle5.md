@@ -1,9 +1,9 @@
-Are the following two function prototypes same?
+Are the following two function prototypes the same?
 ```C
 int foobar(void);
 int foobar();
 ```
-The following programs should be help in finding the answer.  
+The following programs should help in finding the answer.  
 Program 1:
 ```C
 #include <stdio.h>
@@ -45,7 +45,8 @@ main(void){
 	return 0;
 }
 ```
+Answer:  
 Specifying the parameter list as `void` is the correct way of saying "no
 parameters" in C. Leaving it empty means variable arguments (i.e. the function
 can take any number of parameters of unknown type).  
-*Always use void when the function takes no arguments so the compiler detect the error!*
+*Always use void when the function takes no arguments so the compiler can detect the error!*

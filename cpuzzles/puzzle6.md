@@ -16,7 +16,11 @@ main(void){
 	return 0;
 }
 ```
-Depending on the architecture it will be 4 or 8.  
-The reason is that when a function parameter is an array, the C compiler
-interprets it as a pointer, so you are basically taking the size of a pointer
-to the first element of the array, not the size of the whole array.
+Answer:  
+All arrays that are function arguments are rewritten by the compiler at
+compiletime into pointers. Therefore, you are basically taking the size of a
+pointer to the first element of the array, not the size of the whole array.  
+So, depending on the architecture, it will be most likely be 4 or 8.  
+
+Reference:
+* Expert C programming, by Peter Van Der Linden (pages 246-49) has some good explanations why this is so.

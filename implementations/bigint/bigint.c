@@ -9,11 +9,21 @@ struct Bigint {
 	Bigint * leadingdigits;
 };
 
+static int    finaldigit(Bigint *n);
+static Bigint *leadingdigits(Bigint *n);
 static Bigint *addwithcarry(Bigint *n1, Bigint *n2, int carry);
 static Bigint *multiplydigit(int digit, Bigint *n);
 static Bigint *digitcons(Bigint *n, int digit);
-static Bigint *leadingdigits(Bigint *n);
-static int    finaldigit(Bigint *n);
+
+int
+finaldigit(Bigint *n){
+	return n ? n->finaldigit : 0;
+}
+
+Bigint *
+leadingdigits(Bigint *n){
+	return n ? n->leadingdigits : n;
+}
 
 Bigint *
 newbigint(int i){
@@ -49,8 +59,12 @@ biginttostr(Bigint *n){
 	
 	s[0] = finaldigit(n) + '0';
 	s[1] = '\0';
-	if(leadingdigits(n))
-		s = concat(biginttostr(leadingdigits(n)), s);
+	if(leadingdigits(n)){
+		/* TODO FINISH */
+		char *t = biginttostr(leadingdigits(n));
+		int len = strlen(t);
+		s = concat(, s);
+	}
 
 	return s;
 }
@@ -72,4 +86,31 @@ addwithcarry(Bigint *n1, Bigint *n2, int carry){
 Bigint *
 addbigint(Bigint *n1, Bigint *n2){
 	return addwithcarry(n1, n2, 0);
+}
+
+Bigint *
+multiplybigint(Bigint *n1, Bigint *n2){
+	if(!n1)
+		return NULL;
+	Bigint *aux = multiplydigit(finaldigit(n1), n2);
+	return addbigint(aux, multiplybigint(leadingdigits(n1), digitcons(n2, 0)));
+}
+
+Bigint *
+multiplydigit(int digit, Bigint *n){
+	if(!n)
+		return NULL;
+	return addbigint(n, multiplydigit(digit - 1, n));
+}
+
+Bigint *
+digitcons(Bigint *leadingdigits, int finaldigit){
+	if(!leadingdigits & finaldigit == 0)
+		return NULL;
+
+	Bigint *bp        = xmalloc(sizeof(*bp));
+	bp->finaldigit    = finaldigit;
+	bp->leadingdigits = leadingdigits;
+
+	return bp;
 }

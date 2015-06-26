@@ -41,6 +41,15 @@ die(const char *errstr, ...) {
 	exit(EXIT_FAILURE);
 }
 
+void
+warn(const char *warnstr, ...){
+	va_list ap;
+
+	va_start(ap, warnstr);
+	vfprintf(stderr, warnstr, ap);
+	va_end(ap);
+}
+
 /* From "The Pragmatic Programmer", page 121
  *
  * Check a line of code's return value
@@ -54,7 +63,6 @@ die(const char *errstr, ...) {
 
 void
 ut_abort(char *file, int ln, char *line, int rc, int exp){
-	fprintf(stderr, "%s line %d\n'%s': expected %d, got %d\n",
-					file,	ln, line,		  exp,	rc);
+	fprintf(stderr, "%s line %d\n'%s': expected %d, got %d\n", file, ln, line, exp, rc);
 	exit(EXIT_FAILURE);
 }
