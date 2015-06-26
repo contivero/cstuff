@@ -8,6 +8,7 @@ main(void){
 	return 0;
 }
 ```
+Answer:  
 The `(int*)` cast hides the fact that without the `#include <stdlib.h>`, the
 return type of malloc is assumed to be int. IA-64 happens to have `sizeof(int) < sizeof(int *)`,
 which makes this problem obvious.  
