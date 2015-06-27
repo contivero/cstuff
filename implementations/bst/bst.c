@@ -1,12 +1,10 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "../util.h"
 
-/* Change comparison function, key and value types as necessary */
-#define KEYCMP(a,b) strcmp((a),(b))
 typedef char * valueT;
 typedef char * keyT;
-
 typedef struct Node Node;
 
 struct Node{
@@ -21,9 +19,26 @@ typedef struct BST{
 	size_t size;
 } BST;
 
-static Node *newnode(const char *key, const char *value);
+/* prototypes */
+BST    *newbst(void);
+void   freebst(BST *bst);
+valueT lookup(BST *bst, keyT key);
+void   insert(BST *bst, keyT key, valueT value);
+void   delete(BST *bst, keyT key);
+
+static Node *newnode(const keyT key, const valueT value);
 static void freenode(Node *np);
 static void freerec(Node *np);
+static void deletenode(Node *np, Node *prev, int prevcmp);
+static void linkprevious(Node *prev, Node *next, int prevcmp);
+
+inline void
+linkprevious(Node *prev, Node *next, int prevcmp){
+	if(prevcmp < 0)
+		prev->left = next;
+	else 
+		prev->right = next;
+}
 
 BST *
 newbst(void){
@@ -36,7 +51,7 @@ newbst(void){
 }
 
 Node *
-newnode(const char *key, const char *value){
+newnode(const keyT key, const valueT value){
 	Node *np = xmalloc(sizeof(*np));
 
 	np->left  = NULL;
@@ -61,7 +76,7 @@ freerec(Node *np){
 	if(np){
 		Node *right = np->right;
 		Node *left  = np->left;
-		free(np);
+		freenode(np);
 		freerec(left);
 		freerec(right);
 	}
@@ -73,8 +88,8 @@ freebst(BST *bst){
 	free(bst);
 }
 
-char *
-lookup(BST *bst, char *key){
+valueT
+lookup(BST *bst, keyT key){
 	int cmp;
 	Node *np = bst->root;
 
@@ -91,47 +106,49 @@ lookup(BST *bst, char *key){
 	return NULL;
 }
 
-int
-insert(BST *bst, char *key, char *value){
+void
+insert(BST *bst, keyT key, valueT value){
 	int cmp;
-	Node *np;
+	Node *np = bst->root;
 
-	np = bst->root;
-	while(np){
-		cmp = strcmp(key, np->key);
+	if(!np){
+		bst->root = newnode(key, value);
+		bst->size++;
+		return;
+	}
+
+	while(np && (cmp = strcmp(key, np->key))){
 		if(cmp < 0){
 			if(np->left == NULL){
 				np->left = newnode(key, value);
 				bst->size++;
-				return 1;
+				return;
 			}
 			np = np->left;
-		} else if(cmp > 0){
+		} else {
 			if(np->right == NULL){
 				np->right = newnode(key, value);
 				bst->size++;
-				return 1;
+				return;
 			}
 			np = np->right;
 		}
-		else
-			break;
 	}
 
 	warn("insert: duplicate entry %s ignored\n", key);
-	return 0;
+	return;
 }
 
-/* assumes bst is a valid pointer and not NULL */
 void
-delete(BST *bst, char *key){
-	int cmp;
+delete(BST *bst, keyT key){
+	int cmp, prevcmp;
 	Node *prev = NULL;
 	Node *np = bst->root;
 
 	/* find node to delete */
-	while(np && (cmp = KEYCMP(key, np->key))){
+	while(np && (cmp = strcmp(key, np->key))){
 		prev = np;
+		prevcmp = cmp;
 		if(cmp < 0)
 			np = np->left;
 		else
@@ -139,50 +156,94 @@ delete(BST *bst, char *key){
 	}
 
 	if(!np)
-		return; /* The key to delete wasn't found */
+		return; /* key to delete wasn't found */
 
-	if(np->left == NULL && np->right == NULL){
-		if(!prev){
-			freenode(bst->root);
-			bst->root = NULL;
-		} else {
-			freenode(np);
-			if(KEYCMP(key, prev->key) < 0)
-				prev->left = NULL;
-			else 
-				prev->right = NULL;
-		}
-	} else if(np->left == NULL){
-		if(!prev){
-			np = np->right;
-			freenode(bst->root);
-			bst->root = np;
-		} else {
-			if(KEYCMP(key, prev->key) < 0)
-				prev->left = np->right;
-			else 
-				prev->right = np->right;
-			freenode(np);
-		}
-	} else if(np->right == NULL) {
-		if(!prev){
-			np = np->left;
-			freenode(bst->root);
-			bst->root = np;
-		} else {
-			if(KEYCMP(key, prev->key) < 0)
-				prev->left = np->left;
-			else 
-				prev->right = np->left;
-			freenode(np);
-		}
+	if(np->left == NULL){
+		if(prev)
+			linkprevious(prev, np->right, prevcmp);
+		else
+			bst->root = np->right;
+		freenode(np);
+	} else if (np->right == NULL){
+		if(prev)
+			linkprevious(prev, np->left, prevcmp);
+		else
+			bst->root = np->left;
+		freenode(np);
 	} else {
-		if(!prev)
-			;
+		Node *succprev = NULL;
+		Node *succesor = np->left;
+		while(succesor->right){
+			succprev = succesor;
+			succesor = succesor->right;
+		}
+		succprev->right = succesor->left;
+		free(np->key);
+		free(np->value);
+		np->key = succesor->key;
+		np->value = succesor->value;
+		free(succesor);
 	}
+	bst->size--;
 }
 
-void
-deletevalue(Node *np, keyT key){
+/* void */
+/* printnodes(Node *np){ */
+/* 	if(np){ */
+/* 		printnodes(np->left); */
+/* 		printf("[%s, %s]\n", np->key, np->value); */
+/* 		printnodes(np->right); */
+/* 	} */
+/* } */
 
-}
+/* void */
+/* printbst(BST *bst){ */
+/* 	if(bst->root){ */
+/* 		printf("ROOT: %s | %s\n", bst->root->key, bst->root->value); */
+/* 	} */
+/* 	printnodes(bst->root); */
+/* } */
+
+/* int */
+/* main(void){ */
+/* 	BST *bst = newbst(); */
+/* 	printf("%d\n", bst->size); */
+/* 	insert(bst, "3", "c"); */
+/* 	printf("%d\n", bst->size); */
+/* 	insert(bst, "4", "d"); */
+/* 	printf("%d\n", bst->size); */
+/* 	insert(bst, "7", "g"); */
+/* 	printf("%d\n", bst->size); */
+/* 	insert(bst, "9", "i"); */
+/* 	printf("%d\n", bst->size); */
+/* 	insert(bst, "1", "a"); */
+/* 	printf("%d\n", bst->size); */
+/* 	insert(bst, "5", "e"); */
+/* 	printf("%d\n", bst->size); */
+/* 	insert(bst, "2", "b"); */
+/* 	printf("%d\n", bst->size); */
+/* 	insert(bst, "6", "f"); */
+/* 	printf("%d\n", bst->size); */
+/* 	insert(bst, "8", "h"); */
+/* 	printf("%d\n", bst->size); */
+/* 	printbst(bst); */
+/* 	delete(bst, "1"); */
+/* 	printbst(bst); */
+/* 	delete(bst, "2"); */
+/* 	printbst(bst); */
+/* 	delete(bst, "3"); */
+/* 	printbst(bst); */
+/* 	delete(bst, "4"); */
+/* 	printbst(bst); */
+/* 	delete(bst, "5"); */
+/* 	printbst(bst); */
+/* 	delete(bst, "6"); */
+/* 	printbst(bst); */
+/* 	delete(bst, "7"); */
+/* 	printbst(bst); */
+/* 	delete(bst, "8"); */
+/* 	printbst(bst); */
+/* 	delete(bst, "9"); */
+/* 	printbst(bst); */
+/* 	freebst(bst); */
+/* } */
