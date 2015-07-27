@@ -17,10 +17,10 @@ BM *
 newBM(char *pat, int patlen){
 	int i, j, *d2, *d1;
 
-	BM *bm          = xmalloc(sizeof(*bm));
-	bm->delta1 = d1 = xmalloc(sizeof(*bm->delta1) * ALPHABET_LEN);
-	bm->delta2 = d2 = xcalloc(patlen + 1, sizeof(*bm->delta2));
-	bm->patlen = patlen;
+	BM *bm           = xmalloc(sizeof(*bm));
+	bm->delta1  = d1 = xmalloc(sizeof(*bm->delta1) * ALPHABET_LEN);
+	bm->delta2  = d2 = xcalloc(patlen + 1, sizeof(*bm->delta2));
+	bm->patlen  = patlen;
 	bm->pattern = pat;
 
 	/* preprocess bad-character rule */
@@ -68,9 +68,8 @@ freeBM(BM *bm){
 }
 
 void 
-bmsearch(BM *bm, char *txt) {
+bmsearch(BM *bm, char *txt, int txtlen){
 	int patlen = bm->patlen;
-	int txtlen = strlen(txt); /* FIXME */
 	int *d1 = bm->delta1;
 	int *d2 = bm->delta2;
 	char *pat = bm->pattern;
@@ -81,7 +80,7 @@ bmsearch(BM *bm, char *txt) {
 		while (j >= 0 && pat[j] == txt[i+j]) 
 			j--;
 		if (j < 0){
-			OUTPUT(i);/* function to output character goes here */
+			OUTPUT(i);  /* function to output position goes here */
 			i += d2[0];
 		} else {
 			i += MAX(d2[j+1], j - d1[txt[i+j]]);
