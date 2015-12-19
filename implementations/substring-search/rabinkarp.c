@@ -38,11 +38,6 @@ freeRK(RK *rk){
 	free(rk);
 }
 
-int
-check(int i){
-	return 1; /* Monte Carlo implementation */
-}             /* For Las Vegas, compare pat vs txt[i..i-M+1] */
-
 long
 rkhash(char *key, long Q, int M, int R){
 	long h = 0; 

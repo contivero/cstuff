@@ -11,12 +11,21 @@ main(void){
     lookup(table, 1, "third", &values[2]);
     lookup(table, 1, "fourth", &values[3]);
     lookup(table, 1, "fifth", &values[4]);
+    lookup(table, 1, "5", &values[5]);
+    lookup(table, 1, "6", &values[6]);
+    lookup(table, 1, "7", &values[7]);
+    lookup(table, 1, "8", &values[8]);
+    lookup(table, 1, "9", &values[9]);
+    lookup(table, 1, "10", &values[10]);
+    lookup(table, 1, "11", &values[11]);
+    lookup(table, 1, "12", &values[12]);
+    lookup(table, 1, "13", &values[13]);
 
-    printf("%d ", *(int *)lookup(table, 0, "first", NULL));
-    printf("%d ", *(int *)lookup(table, 0, "second", NULL));
-    printf("%d ", *(int *)lookup(table, 0, "fourth", NULL));
-    printf("%d ", *(int *)lookup(table, 0, "fifth", NULL));
-    printf("%d\n", *(int *)lookup(table, 0, "third", NULL));
+	print(table);
+    delete(table, "fifth");
+    delete(table, "second");
+	printf("\n");
+	print(table);
 
     freesymboltable(table);
 }

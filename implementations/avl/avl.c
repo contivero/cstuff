@@ -2,6 +2,9 @@
 #include <string.h>
 #include "../util.h"
 
+/*
+ * http://www.superstarcoders.com/blogs/posts/efficient-avl-tree-in-c-sharp.aspx
+ */
 typedef char * valueT;
 typedef char * keyT;
 typedef struct Node Node;

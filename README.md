@@ -1,9 +1,9 @@
 # cstuff
 Simple implementations of different algorithms and data structures in C, mainly
-as a personal reference. Mostly based on those found on Eric Robert's book
-"Programming abstractions in C".  
-Whenever memory cannot be allocated, the implementations simply abort the program, so be careful
-in the cases such behavior is undesirable.
+as a personal reference. Some based on those found on Eric Robert's
+*Programming abstractions in C*, others in Sedgewick's *Algorithms*.
+Whenever memory cannot be allocated, the implementations simply abort the
+program, so be careful in the cases such behavior is undesirable.
 
 Below are notes on idioms, conventions, and general recommened practices for C
 programming (although many are applicable to other languages). Some stuff is

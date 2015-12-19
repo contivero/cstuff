@@ -1,6 +1,3 @@
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "symtab.h"
 #include "../util.h"
 
@@ -16,20 +13,19 @@ struct Node{
 	Node *next;
 };
 
-typedef struct Symtab Symtab;
 struct Symtab{
 	Node **buckets;
 	unsigned int size;
 	unsigned long entries;
 };
 
-static void expandtable(Symtab *table);
-static char *clonekey(char *key);
-static Node *findnode(Node *nodep, char *key);
-static void freebucketchain(Node *nodep);
-static void freebuckets(Node **buckets, int size);
+static void          expandtable(Symtab *table);
+static char          *clonekey(char *key);
+static Node          *findnode(Node *nodep, char *key);
+static void          freebucketchain(Node *nodep);
+static void          freebuckets(Node **buckets, int size);
 static unsigned long hash(char *key, int nbuckets);
-static int mustexpand(Symtab *table);
+static int           mustexpand(Symtab *table);
 
 Symtab *
 newsymboltable(void){
@@ -45,6 +41,57 @@ void
 freesymboltable(Symtab *table){
 	freebuckets(table->buckets, table->size);
 	free(table);
+}
+
+int
+contains(Symtab *table, char *key){
+	return lookup(table, 0, key, NULL) != NULL;
+}
+
+void
+insert(Symtab *table, char *key, void *value){
+	unsigned long h = hash(key, table->size);
+	Node *np = findnode(table->buckets[h], key);
+
+	if(np){
+		np->value = value;
+		return;
+	}
+
+	np        = xmalloc(sizeof(*np));
+	np->key   = clonekey(key);
+	np->value = value;
+	np->next  = table->buckets[h];
+	table->buckets[h] = np;
+	table->entries++;
+	if(mustexpand(table))
+		expandtable(table);
+}
+
+int
+delete(Symtab *table, char *key){
+	unsigned long h = hash(key, table->size);
+	Node *np = table->buckets[h];
+	Node *prev = NULL;
+
+	while(np && strcmp(np->key, key)){
+		prev = np;
+		np = np->next;
+	}
+
+	if(!np)
+		return 0;
+
+	if(prev != NULL)
+		prev->next = np->next;
+	else
+		table->buckets[h] = NULL;
+
+	free(np->key);
+	free(np);
+	table->entries--;
+
+	return 1;
 }
 
 /* lookup with optional insertion
@@ -67,18 +114,36 @@ lookup(Symtab *table, int insert, char *key, void *value){
 		if(mustexpand(table))
 			expandtable(table);
 	}
+
 	return np;
+}
+
+/* Assumes int! Used for testing. 
+ * To print, the symbol table should receive the printing
+ * function of the value type
+ */
+void
+print(Symtab *table){
+	unsigned int i;
+	Node *np;
+
+	for(i = 0; i < table->size; i++){
+		np = table->buckets[i];
+		while(np){
+			printf("%d\n", *(int *)np->value);
+			np = np->next;
+		}
+	}
 }
 
 void
 mapsymtab(symtabfnT fn, Symtab *table, void *clientData){
 	unsigned int size = table->size;
+	unsigned int i;
 
-	for(int i = 0; i < table->size; i++){
-		for(Node *np = table->buckets[i]; np; np->next){
+	for(i = 0; i < size; i++)
+		for(Node *np = table->buckets[i]; np; np = np->next)
 			fn(np->key, np->value, clientData);
-		}
-	}
 }
 
 static char *
@@ -116,7 +181,7 @@ hash(char *key, int nbuckets){
 	unsigned long i;
 	unsigned long hashcode = 0;
 
-	for(int i = 0; key[i] != '\0'; i++)
+	for(i = 0; key[i] != '\0'; i++)
 		hashcode = hashcode * MULTIPLIER + key[i];
 
 	return hashcode % nbuckets;
@@ -146,7 +211,7 @@ expandtable(Symtab *table){
 	for(unsigned int i = 0; i < oldsize; i++){
 		Node *np = oldbuckets[i];
 		while(np){
-			lookup(table, 1, np->key, np->value);
+			insert(table, np->key, np->value);
 			np = np->next;
 		}
 	}
