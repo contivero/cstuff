@@ -6,7 +6,7 @@ What's the output of the following program and why?
 
 void 
 size(int arr[SIZE]){
-	printf("size of array is:%d\n",sizeof(arr));
+	printf("size of array is: %d\n", sizeof(arr));
 }
 
 int 
