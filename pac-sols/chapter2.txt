@@ -1,0 +1,60 @@
+1. A pointer is simply the internal machine address of a value inside the
+computer's memmory. An array is an ordered collection of data values, each of
+which is of the same type. A record is a collection of data values that
+represents some logically coherent whole.
+
+2.
+typedef enum {
+      TRIANGLE
+    , SQUARE
+    , PENTAGON
+    , HEXAGON
+    , OCTAGON
+} polygonT;
+
+typedef enum {
+      TRIANGLE = 3
+    , SQUARE
+    , PENTAGON
+    , HEXAGON
+    , OCTAGON = 8
+} polygonT;
+
+or, to avoid possible future problems if an addition is done:
+
+typedef enum {
+      TRIANGLE = 3
+    , SQUARE = 4
+    , PENTAGON = 5
+    , HEXAGON = 6
+    , OCTAGON = 8
+} polygonT;
+
+3.   I. The programmer doesn't need to specify the internal codes explicitly.
+    II. The fact that there is a different type name often makes the program
+        easier to read because declarations can use a meaningful type name instead
+        of the general purpose designation int.
+   III. On many systems programs that use enumeration types are easier to debug
+        because the compiler makes the names of the enumeration constants
+        available to the debugger.
+
+4. True
+
+5. ????? TODO ?????
+
+6. The typedef keyword defines a new type based on some other type.
+
+7. bit = binary digit. A value of either 0 or 1.
+   byte = an ordered collection of 8 bits.
+   word = usually defined to be the size required to hold a value of type int.
+   address = a numbered memory cell where information can be stored.
+
+8. False (architecture dependent)
+
+9. True, sizeof(char) is always 1, although in some architectures a byte is not
+   an octet, but, say, 16 or 32 bits.
+
+10. The sizeof operator returns the number of bytes required to store a value of
+a type.
+
+11.
