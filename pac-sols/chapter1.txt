@@ -1,0 +1,117 @@
+                         Programming Abstractions in C
+                                   Chapter 1
+                                Review Questions
+
+1. The source file contains the text of the program, while the object file
+   contains machine-language instructions, and is the result of compiling the
+   source file.
+
+2. /* */, and //
+
+3. The angle brackets are used to specify a system library, such as the
+   standard input/output library (stdio) that is supplied along with ANSI C. The
+   quotation marks are used for private libraries.
+
+4. #define CentimetersPerInch 2.54
+
+5. main
+
+6. When using printf, you must indicate explicitly that you want to move on to
+   the next line by including the special character called newline, which is
+   indicated in the string by two character sequences: \n
+
+7. Name, type, lifetime, scope.
+
+8. All except: %correct, total output, marginal-cost.
+
+9. A domain (the set of values that belong to that type), and a set of
+   operations (which defines the behavior of that type).
+
+10. The amount of bytes that a short uses is smaller or equal to the amount of
+    bytes that an int uses, which in turn is smaller or equal to the amount of
+    bytes a long uses. I.e.:
+      sizeof(short) <= sizeof(int) <= sizeof(long)
+    Apart from this, the maximum value an int can contain must be at least 2^15
+    -1, while for a long it must be 2^31 - 1.
+
+11. American Standard Code for Information Interchange.
+
+12. FALSE, TRUE.
+
+13. If using the library used in the book:
+        double x = GetReal();
+    Otherwise:
+        double x;
+        scanf("%lf", &x);
+
+14. printf("%d\n", i);
+    printf("%ld\n", l);
+    printf("%f\n", f);
+    printf("%f\n", d);
+    printf("%c\n", c);
+    printf("%s\n", s);
+
+15. a. 5      int
+    b. 3      int
+    c. 3.8    double
+    d. 18.0   double
+    e. 4      int
+    f. 2      int
+
+16. The - operator occurs in two forms. When it is written between two operands,
+    it is a binary operator representing substraction. When it is written in
+    front of a single operand, as in -b, it is a unary operator representing
+    negation. The precedences of the unary and binary versions of an operator
+    are different.
+
+17. Truncation is the operation of discarding a decimal fraction.
+
+18. a. 4
+    b.
+    c.
+    d.
+
+19. By doing:
+      variable op= expression;
+    which means:
+      variable = variable op (expression);
+
+20. ++x first increments x, and then uses its value. This is called the prefix
+    form of the increment operator.
+    x++ uses whichever value is stored in x, and then increments it. This is
+    called the postfix form of the increment operator.
+
+21. Short-circuit evaluation is the style of evaluation that stops as soon as
+    the answer is known.
+
+22. if(condition){
+      statements
+    }
+
+    while(condition){
+      statements
+    }
+
+    for(init; test; step){
+      statements
+    }
+
+    switch(e){
+      case c1: statements
+               break;
+      case c2: statements
+               break;
+      default: statements
+    }
+
+23.
+
+24.
+
+25.
+
+26.
+
+27.
+
+28.

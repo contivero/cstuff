@@ -21,6 +21,7 @@ taken almost verbatim from the references.
 * [Testing for null pointers](#testing-for-null-pointers)
 * [Enums vs #defines](#enums-vs-defines)
 * [Idiomatic variable names](#idiomatic-variable-names)
+* [General Idioms](#general-idioms)
 * [Parenthesis on sizeof but not on return](#idiomatic-variable-names)
 * [References](#references)
 
@@ -63,6 +64,7 @@ while(islower(c = getchar()))
     ...
 ```
 Instantiating a macro at every occurrence makes the compiled program larger too.
+
 **Always parenthesize the macro body and arguments**:
 ```C
 #define square(x) x * x         /* Incorrect, nothing parenthesized */
@@ -221,6 +223,47 @@ during compilation.
 ```C
 struct passwd *pw;
 ```
+### General idioms
+**Infinite loop**:
+There are two stablished forms, the shortest is
+```C
+for(;;)
+    ...
+```
+but
+```C
+while(1)
+    ...
+```
+is also popular. Don't use anything else.
+
+**Nesting an assignment inside a loop condition:**
+```C
+while((ch = getchar()) != EOF)
+    putchar(ch);
+```
+
+**Getting the size of an array:**
+The idiomatic way is using `sizeof`, as shown in the following code:
+```C
+#define NELEMS(array) (sizeof(array)/sizeof(array[0]))
+
+double dbuf[100];
+
+for(int i = 0; i < NELEMS(dbuf); i++)
+    ...
+```
+This is an appropriate use for a macro, because it does something that a
+function cannot: compute the size of an array from its declaration.
+
+**Deleting from an array:**
+The idiom is using memmove (p.68 of [2]), for instance:
+```C
+memmove(array, array+1, (ARRAY_SZ-1)*sizeof(array[0]));
+```
+deletes the element `array[0]`, by shifting all the values from `array[1]` to
+`array[ARRAY_SZ-1]`, leaving an empty space at the end.
+
 ### Parenthesis on sizeof but not on return
 I'll let Torvalds do the talking:
 > On Wed, Jul 11, 2012 at 1:14 AM, George Spelvin <linux@horizon.com> wrote:
@@ -269,9 +312,9 @@ I'll let Torvalds do the talking:
 > ass-backwards special case C parsing rule that is subtle as hell.
 
 ### References
-* Brian W. Kernighan and Dennis M. Ritchie, The C Programming Language
-* Brian W. Kernighan and Rob Pike, The Practice of Programming
-* Peter van der Linden, Expert C Programming: Deep C Secrets
-* Eric S. Roberts, Programming Abstractions in C
-* [suckless.org/coding_style](http://suckless.org/coding_style)
-* http://www.cs.tufts.edu/comp/40/idioms.html
+1. Brian W. Kernighan and Dennis M. Ritchie, The C Programming Language
+2. Brian W. Kernighan and Rob Pike, The Practice of Programming
+3. Peter van der Linden, Expert C Programming: Deep C Secrets
+4. Eric S. Roberts, Programming Abstractions in C
+5. [suckless.org/coding_style](http://suckless.org/coding_style)
+6. http://www.cs.tufts.edu/comp/40/idioms.html
