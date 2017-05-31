@@ -1,5 +1,9 @@
+                         Programming Abstractions in C
+                                   Chapter 2
+                                Review Questions
+
 1. A pointer is simply the internal machine address of a value inside the
-computer's memmory. An array is an ordered collection of data values, each of
+computer's memory. An array is an ordered collection of data values, each of
 which is of the same type. A record is a collection of data values that
 represents some logically coherent whole.
 
@@ -57,4 +61,143 @@ typedef enum {
 10. The sizeof operator returns the number of bytes required to store a value of
 a type.
 
-11.
+11. Pointers allow you to refer to a large data structure in a compact way.
+    Pointers facilitate sharing data between different parts of a program.
+    Pointers make it possible to reserve new memory during program execution.
+    Pointers can be used to record relationships among data items.
+
+12. Any expression that refers to an internal memory location capable of storing
+    data is called an lvalue. The l at the beginning comes from the observation
+    that lvalues can appear on the left side of an assignment statement in C.
+
+13. The first one is a pointer-to-int, the second one is an int.
+
+14. bool *pFlag;
+
+15. The two fundamental pointer operations are:
+     &  address-of
+     *  value-pointed-to
+    Using * is dereferencing.
+
+16. Pointer assignment, such as:
+     p1 = p2;
+    makes p1 and p2 point to the same location. Value assignment, which is
+    represented by the statement
+     *p1 = *p2;
+    copies the value in the location addressed by p2 into the location address
+    by p1.
+
+17.     |-------------|
+     v1 |     10      | 1000
+        |-------------|
+     v2 |     25      | 1004
+        |-------------|
+     p1 |    1000     | 1008
+        |-------------|
+     p2 |    1004     | 1012
+        |-------------|
+
+        |-------------|
+     v1 |     35      | 1000
+        |-------------|
+     v2 |     25      | 1004
+        |-------------|
+     p1 |    1000     | 1008
+        |-------------|
+     p2 |    1004     | 1012
+        |-------------|
+
+        |-------------|
+     v1 |     35      | 1000
+        |-------------|
+     v2 |     25      | 1004
+        |-------------|
+     p1 |    1000     | 1008
+        |-------------|
+     p2 |    1000     | 1012
+        |-------------|
+
+        |-------------|
+     v1 |     70      | 1000
+        |-------------|
+     v2 |     25      | 1004
+        |-------------|
+     p1 |    1000     | 1008
+        |-------------|
+     p2 |    1000     | 1012
+        |-------------|
+
+18. The internal representation of NULL is the address value 0.
+
+19. Declaring a parameter as a pointer type, and then passing an address as the
+    corresponding argument.
+
+20. #define REAL_ARRAY_SZ 100
+    #define IN_USE_SZ     100
+    #define LINES_SZ      100
+
+    float realArray[100];
+    bool inUse[16];
+    char *lines[1000];
+
+21. #define SQUARES_SZ 11
+
+    int squares[SQUARES_SZ];
+    int i;
+
+    for(i = 0; i < SQUARES_SZ; i++)
+        squares[i] = i*i;
+
+22. The size of the array specified in the declaration is the allocated size;
+    the number of elements actively in use is called the effective size.
+
+23.
+                         _____________
+     rectangular[0][0]  |_____________| 1000
+     rectangular[0][1]  |_____________| 1004
+     rectangular[0][2]  |_____________| 1008
+     rectangular[1][0]  |_____________| 1012
+     rectangular[1][1]  |_____________| 1016
+     rectangular[1][2]  |_____________| 1020
+
+24. #define ROWS 8
+    #define COLS 8
+
+    char board[ROWS][COLS] =
+      { "RNBQKBNR"
+      , "PPPPPPPP"
+      , "--------"
+      , "--------"
+      , "--------"
+      , "--------"
+      , "pppppppp"
+      , "rnbqkbnr"
+      };
+
+25. It computes j+3, accesses the array at that index, and the applies the
+    address-of operator to know the address.
+
+26. arr[2] accesses the element at the the third position in the array, while
+    arr + 2 gives the address of this element, using pointer arithmetic.
+
+27. 1040
+
+28. I'm not sure what is meant by "internal representation" of p, but p++ adds
+    one to the value of p, that is, the address stored in p.
+
+29. Define a new structure type, and declare variables of the new type.
+
+30. The correct expression is p->cost, which is the same as (but more concise
+    than) (*p).cost.
+    *p.cost actually means *(p.cost) because the dot operator takes precedence
+    over dereferencing.
+
+31. The pool of unallocated memory available to a program is called the heap.
+
+32. It functions as a general pointer type, whose actual type the caller can
+    establish later.
+
+33. Uninteresting question.
+
+34. System for dynamic allocation that actively goes through memory to see what
+    parts of it are in use, freeing any storage that is no longer needed.
