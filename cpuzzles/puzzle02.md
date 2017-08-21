@@ -13,7 +13,7 @@ main(void){
 	return 0;
 }
 ```
-Answer:  
+## Answer
 Output is usually buffered by the system. Depending on how it works, simply
 adding a newline character `'\n'` at the end of the string should be sufficient
 to flush the contents. Otherwise, you can call `fflush(stdout)` explicitly.  On

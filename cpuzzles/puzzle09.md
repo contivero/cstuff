@@ -20,7 +20,7 @@ main(void) {
 Possible reading:
 The C programming language (K & R), page 60 (What's the effect of continue statement in a do-while loop?)
 
-Answer:  
+## Answer
 The output is just 1. One might expect that the continue statement would skip
 the do-while condition check, but it doesn't. In a while and do-while,
 `continue` causes the test part to be executed immediately. In a for, control

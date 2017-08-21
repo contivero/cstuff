@@ -104,14 +104,34 @@
       default: statements
     }
 
-23.
+23. The switch statement allows testing a value (called the control expression)
+    against several others, and doing different things according to which value
+    it matches.
 
-24.
+24. A sentinel is a special value that denotes something, for instance, when an
+    iteration should stop because the end of input has been reached.
 
-25.
+25. a.
+        for(i = 1, count = 0; i <= 100; i++)
+            count += i;
 
-26.
+    b.
+        for(count = 0; count < 100; count += 7)
+            ;
 
-27.
+    c.
+        for(count = 100; count > 0; count -= 2)
+            ;
 
-28.
+26. A function prototype is the declaration of a function.
+
+27. Arguments are evaluated, and pushed onto the stack, with whatever type
+    conversion necessary. The body of the function is executed until the
+    function returns, at which moment the stack frame is destroyed, with all the
+    locally defined variables, and control returns to the previous function that
+    called it.
+
+28. Stepwise refinement, or top-down design, is the process of starting with the
+    main pieces of a program, and refining it, subdividing them into smaller and
+    smaller functions as needed, thus building the program from the top
+    downwards. The opposite is bottom-up.

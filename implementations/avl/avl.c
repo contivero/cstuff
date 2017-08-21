@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../util.h"
+#include <stdio.h>
 
 /*
  * http://www.superstarcoders.com/blogs/posts/efficient-avl-tree-in-c-sharp.aspx
@@ -23,8 +24,16 @@ typedef struct AVL{
 	size_t size;
 } AVL;
 
+void rebalanceAVL(AVL *avl, Node *np, int balance);
+AVL  *newAVL(void);
+Node *newNode(const keyT key, const valueT value, Node *parent);
+void freeNode(Node *np);
+void freerec(Node *np);
+
+void freeAVL(AVL *avl);
+
 AVL *
-newavl(void){
+newAVL(void){
 	AVL *avl = xmalloc(sizeof(*avl));
 
 	avl->root = NULL;
@@ -34,7 +43,7 @@ newavl(void){
 }
 
 Node *
-newnode(const keyT key, const valueT value, Node *parent){
+newNode(const keyT key, const valueT value, Node *parent){
 	Node *np = xmalloc(sizeof(*np));
 
 	np->balancefactor = 0;
@@ -50,7 +59,7 @@ newnode(const keyT key, const valueT value, Node *parent){
 }
 
 void
-freenode(Node *np){
+freeNode(Node *np){
 	free(np->value);
 	free(np->key);
 	free(np);
@@ -61,14 +70,14 @@ freerec(Node *np){
 	if(np){
 		Node *right = np->right;
 		Node *left  = np->left;
-		freenode(np);
+		freeNode(np);
 		freerec(left);
 		freerec(right);
 	}
 }
 
 void
-freeavl(AVL *avl){
+freeAVL(AVL *avl){
 	freerec(avl->root);
 	free(avl);
 }
@@ -104,7 +113,7 @@ rotateleft(AVL *avl, Node *np){
 		avl->root = right;
 	else if(parent->right == np)
 		parent->right = right;
-	else 
+	else
 		parent->left = right;
 
 	right->balancefactor++;
@@ -118,15 +127,15 @@ rotateright(AVL *avl, Node *np){
     Node *left = np->left;
     Node *leftright = left->right;
     Node *parent = np->parent;
-  
+
     left->parent = parent;
     left->right  = np;
     np->left     = leftright;
     np->parent   = left;
- 
+
     if (leftright)
         leftright->parent = np;
- 
+
     if (np == avl->root)
         avl->root = left;
     else if(parent->left == np)
@@ -147,7 +156,7 @@ rotateleftright(AVL *avl, Node *np){
     Node *parent = np->parent;
     Node *leftrightright = leftright->right;
     Node *leftrightleft = leftright->left;
-  
+
     leftright->parent = parent;
     np->left = leftrightright;
     left->right = leftrightleft;
@@ -180,31 +189,31 @@ rotateleftright(AVL *avl, Node *np){
     }
 
     leftright->balancefactor = 0;
-  
+
     return leftright;
 }
 
 Node *
 rotaterightleft(AVL *avl, Node *np){
-	Node *right = np->right;
-    Node *rightleft = right->left;
-    Node *parent = np->parent;
-    Node *rightleftleft = rightleft->left;
+	Node *right          = np->right;
+    Node *rightleft      = right->left;
+    Node *parent         = np->parent;
+    Node *rightleftleft  = rightleft->left;
     Node *rightleftright = rightleft->right;
- 
+
     rightleft->parent = parent;
-    np->right = rightleftleft;
-    right->left = rightleftright;
-    rightleft->right = right;
-    rightleft->left = np;
-    right->parent = rightleft;
-    np->parent = rightleft;
+    np->right         = rightleftleft;
+    right->left       = rightleftright;
+    rightleft->right  = right;
+    rightleft->left   = np;
+    right->parent     = rightleft;
+    np->parent        = rightleft;
 
     if (rightleftleft)
         rightleftleft->parent = np;
     if (rightleftright)
         rightleftright->parent = right;
-  
+
     if (np == avl->root)
         avl->root = rightleft;
     else if (parent->right == np)
@@ -222,14 +231,14 @@ rotaterightleft(AVL *avl, Node *np){
         np->balancefactor = 1;
         right->balancefactor = 0;
     }
-  
+
     rightleft->balancefactor = 0;
-  
+
     return rightleft;
 }
 
 void
-rebalanceavl(AVL *avl, Node *np, int balance){
+rebalanceAVL(AVL *avl, Node *np, int balance){
 	while(np){
 		balance += np->balancefactor;
 
@@ -266,7 +275,7 @@ insert(AVL *avl, keyT key, valueT value){
 	int cmp;
 
 	if(!np){
-		avl->root = newnode(key, value, NULL);
+		avl->root = newNode(key, value, NULL);
 		avl->size++;
 		return;
 	}
@@ -276,15 +285,15 @@ insert(AVL *avl, keyT key, valueT value){
 		prev = np;
 		if(cmp < 0){
 			if(np->left == NULL){
-				np->left = newnode(key, value, np);
-				rebalanceavl(avl, np, 1);
+				np->left = newNode(key, value, np);
+				rebalanceAVL(avl, np, 1);
 				return;
 			}
 			np = np->left;
 		} else if(cmp > 0){
 			if(np->right == NULL){
-				np->right = newnode(key, value, np);
-				rebalanceavl(avl, np, -1);
+				np->right = newNode(key, value, np);
+				rebalanceAVL(avl, np, -1);
 				return;
 			}
 			np = np->right;
@@ -292,4 +301,37 @@ insert(AVL *avl, keyT key, valueT value){
 		else
 			; /* ignore repeated value */
 	}
+}
+
+void printrec(Node *np);
+
+void
+print(AVL *avl){
+    printrec(avl->root);
+}
+
+void
+printrec(Node *np) {
+    if(np){
+        printrec(np->left);
+        printf("(%s,%s) ", np->key, np->value);
+        printrec(np->right);
+    }
+
+}
+
+int
+main(void){
+    AVL *avl = newAVL();
+
+    insert(avl, "a", "1");
+    insert(avl, "z", "9");
+    insert(avl, "b", "2");
+    insert(avl, "y", "8");
+    insert(avl, "c", "3");
+    insert(avl, "x", "7");
+    insert(avl, "d", "4");
+
+    print(avl);
+
 }

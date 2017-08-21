@@ -2,4 +2,15 @@
                                    Chapter 3
                                 Review Questions
 
-1.
+1. An interface is the boundary between a library and its clients. It provides a
+   channel of communication, and acts as a barries that prevents complex details
+   on one side from affecting the others. Package refers to the software that
+   defines a library. The conceptual basis of a library is called an
+   abstraction. Lastly, an implementation consists on the source code itself
+   (mostly, but not only, for an interface).
+
+2. TODO
+
+3. In C, an interface is represented by a header file, which traditionally has
+   the same name as the file that implements it with the .c extension replaced
+   by .h

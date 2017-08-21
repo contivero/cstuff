@@ -3,17 +3,17 @@ Are the following two function prototypes the same?
 int foobar(void);
 int foobar();
 ```
-The following programs should help in finding the answer.  
+The following programs should help in finding the answer.
 Program 1:
 ```C
 #include <stdio.h>
 
-void 
+void
 foobar1(void){
 	printf("In foobar1\n");
 }
 
-void 
+void
 foobar2(){
 	printf("In foobar2\n");
 }
@@ -33,20 +33,20 @@ void foobar1(void){
 	printf("In foobar1\n");
 }
 
-void 
+void
 foobar2(){
 	printf("In foobar2\n");
 }
 
-int 
+int
 main(void){
 	foobar1(33, 'a');
 	foobar2();
 	return 0;
 }
 ```
-Answer:  
+## Answer
 Specifying the parameter list as `void` is the correct way of saying "no
 parameters" in C. Leaving it empty means variable arguments (i.e. the function
-can take any number of parameters of unknown type).  
-*Always use void when the function takes no arguments so the compiler can detect the error!*
+can take any number of parameters of unknown type).
+__Always use void when the function takes no arguments so the compiler can detect the error!__

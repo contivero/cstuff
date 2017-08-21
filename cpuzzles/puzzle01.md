@@ -6,11 +6,9 @@ Why doesn't the following code print any values?
 
 int array[] = {23, 34, 12, 17, 204, 99, 16};
 
-int 
+int
 main(void){
-	int d;
-
-	for(d = -1; d <= (TOTAL_ELEMENTS-2); d++)
+	for(int d = -1; d <= (TOTAL_ELEMENTS-2); d++)
 		printf("%d\n",array[d+1]);
 
 	return 0;
@@ -23,13 +21,13 @@ Possible reference: The C programming language (K & R)
 | sizeof operator     | 135      |
 | conversion rules    | 44 & 198 |
 
-Answer:  
-The reason it doesn't print anything is because the condition `d <= (TOTAL_ELEMENTS-2)` is false.  
-The value of `TOTAL_ELEMENTS` is 7, so why does this happen?  
+## Answer
+The reason it doesn't print anything is because the condition `d <= (TOTAL_ELEMENTS-2)` is false.
+The value of `TOTAL_ELEMENTS` is 7, so why does this happen?
 The `sizeof` operator returns an unsigned integer (speciffically, of
-type `size_t` defined in `<stddef.h>`); `d` is a `signed int`.  
-Due to conversion rules, the `signed int` is casted to `unsigned int`.  
-Supposing int is 4 bytes, `-1` is represented as all ones in [two's complement](https://en.wikipedia.org/wiki/Two's_complement): 
+type `size_t` defined in `<stddef.h>`); `d` is a `signed int`.
+Due to conversion rules, the `signed int` is casted to `unsigned int`.
+Supposing int is 4 bytes, `-1` is represented as all ones in [two's complement](https://en.wikipedia.org/wiki/Two's_complement):
 ```
 11111111 11111111 11111111 11111111
 ```

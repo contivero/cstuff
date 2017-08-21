@@ -47,7 +47,7 @@ strtobigint(char *s){
 	ch = s[len-1];
 	if(!isdigit(ch))
 		die("Illegal digit %c\n", ch);
-	
+
 	t = xmalloc(len - 1);
 	strncpy(t, s, len - 2);
 	return digitcons(strtobigint(t), ch - '0');
@@ -56,7 +56,7 @@ strtobigint(char *s){
 char *
 biginttostr(Bigint *n){
 	char *s = xmalloc(sizeof(*s) * 2);
-	
+
 	s[0] = finaldigit(n) + '0';
 	s[1] = '\0';
 	if(leadingdigits(n)){
@@ -105,7 +105,7 @@ multiplydigit(int digit, Bigint *n){
 
 Bigint *
 digitcons(Bigint *leadingdigits, int finaldigit){
-	if(!leadingdigits & finaldigit == 0)
+	if(!leadingdigits && finaldigit == 0)
 		return NULL;
 
 	Bigint *bp        = xmalloc(sizeof(*bp));

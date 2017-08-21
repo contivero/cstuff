@@ -19,7 +19,7 @@ f(1,2)
 ```
 Why?
 
-Answer:  
+## Answer
 The `##` preprocessor operator concatenates two tokens together.  
 `f(1,2)` becomes `1##2`, which becomes `12`.  
 The `#` operator by itself _stringifies_ tokens, so `#a` becomes `"a"`.  

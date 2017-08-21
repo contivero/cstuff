@@ -8,11 +8,11 @@ main(void){
 	return 0;
 }
 ```
-Answer:  
-The `(int*)` cast hides the fact that without the `#include <stdlib.h>`, the
-return type of malloc is assumed to be int. IA-64 happens to have `sizeof(int) < sizeof(int *)`,
+## Answer
+The `(int*)` cast hides the fact that without `#include <stdlib.h>`, the return
+type of malloc is assumed to be int. IA-64 happens to have `sizeof(int) < sizeof(int *)`,
 which makes this problem obvious.  
-You should never cast the return from malloc!
+__You should never cast the return from malloc!__
 * It's unnecessary: `void *` is automatically and safely promoted to any other pointer type in this case.
 * If you forget to include `<stdlib.h>`, it can hide the error.
 * Clutters the code.

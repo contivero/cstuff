@@ -17,9 +17,8 @@ countbits (unsigned int x) {
             , 0x0000FFFF
             };
 
-    int i;
     int shift; /* Number of positions to shift to right*/
-    for (i = 0, shift = 1; i < 5; i ++, shift *= 2)
+    for (int i = 0, shift = 1; i < 5; i ++, shift *= 2)
         x = (x & mask[i]) + ((x >> shift) & mask[i]);
 
     return x;

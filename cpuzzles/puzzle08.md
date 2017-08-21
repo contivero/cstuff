@@ -13,6 +13,10 @@ main(void){
 	return 0;
 }
 ```
-Answer:  
+## Answer:  
 Using `scanf` with a simple `%s` is susceptible to a _buffer overflow_.  
-An alternative would be using `scanf("%81s", str)`.
+The following are valid alternatives:
+```C
+scanf("%81s", str);
+scanf("%.*s", sizeof(str), str);
+```

@@ -16,7 +16,7 @@ main(void){
 	return 0;
 }
 ```
-Answer:  
+## Answer
 All arrays that are function arguments are rewritten by the compiler at
 compiletime into pointers. Therefore, you are basically taking the size of a
 pointer to the first element of the array, not the size of the whole array.  
