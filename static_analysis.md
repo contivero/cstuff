@@ -54,15 +54,17 @@ TODO
 ### GCC
 The compiler shouldn't be overlooked. My personal collection of flags is:
 ```
--pedantic -Wall -Wextra -Wbad-function-cast -Wcast-align -Wcast-qual
+-Wpedantic -Wall -Wextra -Wbad-function-cast -Wcast-align -Wcast-qual
 -Wduplicated-branches -Wfloat-equal -Wformat=2 -Wformat-truncation=2
 -Wimplicit-fallthrough=4 -Winline -Wlogical-op -Wmaybe-uninitialized
 -Wmissing-prototypes -Wnested-externs -Wno-missing-braces
 -Wno-missing-field-initializers -Wold-style-definition -Wpointer-arith
 -Wredundant-decls -Wrestrict -Wshadow -Wstrict-aliasing=2 -Wstrict-overflow=5
 -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wundef -Wuninitialized
--Wunreachable-code -Wunused-macros -Werror 
+-Wunreachable-code -Wunused-macros -Werror
 ```
+Note that [`-pedantic` was deprecated](https://gcc.gnu.org/gcc-4.8/changes.html)
+in favor of `-Wpedantic`.
 
 ## See also
 https://www.gnu.org/software/hurd/open_issues/code_analysis.html

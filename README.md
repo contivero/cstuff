@@ -9,7 +9,7 @@ Below are notes on idioms, conventions, and general recommened practices for C
 programming (although many are applicable to other languages). Some stuff is
 taken almost verbatim from the references.
 
-## Notes on C -  Idioms and conventions
+## Notes on C - Idioms and conventions
 * [Names](#names)
 * [Macros](#macros)
 * [Allocating memory](#allocating-memory)
