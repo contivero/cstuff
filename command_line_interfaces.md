@@ -22,13 +22,14 @@ Some general recommendations:
 * Support `--` as a separator between options and other arguments.
 
 To follow the POSIX convetions, `getopt()` can be used. It might work, but it's
-not perfect, it requires including `<unistd.h>`, which is not standard C (POSIX rather).
-According to Anselm R. Garbe, what's wrong with `getopt()` is [the implementation and the GNU flavor of it](http://lists.suckless.org/dwm/0703/2171.html)
-A source talking about why the API is bad is [Global State: A Tale of Two Bad C APIs](http://nullprogram.com/blog/2014/10/12/).
+not perfect:
+* It requires including `<unistd.h>`, which is not standard C (POSIX rather).
+* In Anselm R. Garbe's words, what's wrong with `getopt()` is [the implementation and the GNU flavor of it](http://lists.suckless.org/dwm/0703/2171.html).
+* [The API is far from perfect](http://nullprogram.com/blog/2014/10/12/).
+
 To avoid reinventing the wheel, some possible alternatives to `getopt()` are:
 * [arg.h - A suckless alternative to getopt](http://git.suckless.org/sbase/plain/arg.h)
 * [A magic getopt](http://www.daemonology.net/blog/2015-12-06-magic-getopt.html)
-
 
 Additional reference:
 - [Answer to What are good habits for designing command line arguments?](https://softwareengineering.stackexchange.com/a/307472)

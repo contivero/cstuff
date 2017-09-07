@@ -8,7 +8,7 @@ options.
 ### [Flawfinder](https://www.dwheeler.com/flawfinder/)
 usage: `flawfinder <filename.c>`
 
-### [Clang's "scan-build"][https://clang-analyzer.llvm.org/scan-build.html]
+### [Clang's "scan-build"](https://clang-analyzer.llvm.org/scan-build.html)
 usage: `scan-build make`
 
 To force a rebuild, use: `scan-build make -B`
@@ -23,7 +23,7 @@ usage: `rats -w 3 <filename.c>`
 
 To stick to high priority warnings (less false positives), use `-w 1`.
 
-### [http://smatch.sourceforge.net](Smatch - The Source Matcher)
+### [Smatch - The Source Matcher](http://smatch.sourceforge.net)
 usage: `smatch --two-passes <filename.c>`
 
 ### [Cobra](http://spinroot.com/cobra/)
@@ -34,8 +34,10 @@ usage: `cobra -cpp -f basic <filename.c>`
 
 ### [Splint - Secure Programming Lint](http://www.splint.org/)
 Good, although its' lack of proper support for C99 syntax is unfortunate, for
-instance the parser chokes with `for(int i = ...`.
-
+instance the parser chokes with `for` initializations:
+```C
+for(int i = 0; ...
+```
 usage : `splint <filename.c>`
 
 ### [Uno](https://spinroot.com/uno/)

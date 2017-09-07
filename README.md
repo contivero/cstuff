@@ -19,10 +19,11 @@ taken almost verbatim from the references.
 * [Never use gets()](#never-use-gets)
 * [Unions for different interpretations of the same data](#unions-for-different-interpretations-of-the-same-data)
 * [Testing for null pointers](#testing-for-null-pointers)
-* [Enums vs #defines](#enums-vs-defines)
+* [Enums vs. #defines](#enums-vs-defines)
 * [Idiomatic variable names](#idiomatic-variable-names)
 * [General Idioms](#general-idioms)
 * [Parenthesis on sizeof but not on return](#idiomatic-variable-names)
+* [Exit codes](#exit-codes)
 * [References](#references)
 
 #### Names
@@ -51,6 +52,10 @@ In summary: **Descriptive names for globals, short names for locals**
 
 Programmers are often encouraged to use long variable names regardless of context.
 That is a mistake: clarity is often achieved through brevity.
+
+Also, don't use the `_t` suffix for types, nor the `_s` suffix for functions.
+The first is reserved for types (typedefs) on the C and POSIX standards, the
+second for bounds-checking functions on the Annex K of the C11 standard.
 
 #### Macros
 **Avoid function macros**: one serious problem with them is that if a
@@ -158,7 +163,10 @@ Type *p, *q; /* correct */
 
 #### Never use `gets()`
 There is no way to limit the amount of input `gets()` will read. It's an
-obsolete function, and `fgets()` should be always used in it's place.
+obsolete function, removed from C starting from C11,  and `fgets()` should be
+always used in it's place. Alternatively, C11 adds `gets_s` in its' Annex K, but
+it is optional (so C11 conforming platforms may not implement it), and the
+standard itself recommends sticking to `fgets()`.
 
 #### Iterating over lists
 ```C
@@ -207,7 +215,7 @@ default:
 }
 ```
 
-#### Enums vs #defines
+#### Enums vs. #defines
 Use `enum` for semantically grouped values, #define otherwise.
 ```C
 #define MAX_LENGTH  1024
@@ -265,7 +273,7 @@ deletes the element `array[0]`, by shifting all the values from `array[1]` to
 `array[ARRAY_SZ-1]`, leaving an empty space at the end.
 
 ### Parenthesis on sizeof but not on return
-I'll let Torvalds do the talking:
+[I'll let Torvalds do the talking:](https://lkml.org/lkml/2012/7/11/103)
 > On Wed, Jul 11, 2012 at 1:14 AM, George Spelvin <linux@horizon.com> wrote:
 > >
 > > Huh.  I prefer sizeof without parens, like I prefer return without parens.
@@ -311,10 +319,50 @@ I'll let Torvalds do the talking:
 > And humans should think of sizeof() as a function, not as some
 > ass-backwards special case C parsing rule that is subtle as hell.
 
+### Exit codes
+
+To indicate success when returning from `main()` or using `exit()`, stick to
+`EXIT_SUCCESS`. Similarly, use `EXIT_FAILURE` when indicating failure of the
+execution. These macros are defined in `<stdlib.h>`, and are the only portable
+way to indicate success and failure of execution.  `exit(1)` is plataform
+dependent (e.g. OpenVMS uses odd numbers to indicate success, making `exit(1)`
+indicate success instead of failure). For consistency, portability, and their
+semantics, use the macros.
+
+For anyone wondering what the standard says, the following is from the C11
+Standard, although present on the C89 standard (ANSI C) already:
+> 5.1.2.2.3 Program termination
+>
+> If the return type of the **main** function is a type compatible with **int**, a return from the
+> initial call to the **main** function is equivalent to calling the **exit** function with the value
+> returned by the **main** function as its argument; reaching the **}** that terminates the
+> **main** function returns a value of 0.
+
+And then:
+
+> 7.22.4.4 The exit function
+> Synopsis
+> ```
+> #include <stdlib.h>
+> _Noreturn void exit(int status);
+> ```
+>
+> [...]
+>
+> If the value of **status** is zero or **EXIT_SUCCESS**, an implementation-defined form
+> of the status _successful termination_ is returned. If the value of *status*** is
+> **EXIT_FAILURE**, an implementation-defined form of the status _unsuccessful termination_
+> is returned. Otherwise the status returned is implementation-defined.
+
 ### References
 1. Brian W. Kernighan and Dennis M. Ritchie, The C Programming Language
 2. Brian W. Kernighan and Rob Pike, The Practice of Programming
 3. Peter van der Linden, Expert C Programming: Deep C Secrets
-4. Eric S. Roberts, Programming Abstractions in C
-5. [suckless.org/coding_style](http://suckless.org/coding_style)
-6. http://www.cs.tufts.edu/comp/40/idioms.html
+4. [Eric S. Roberts, Programming Abstractions in C](https://cs.stanford.edu/people/eroberts/books/ProgrammingAbstractionsInC/)
+5. [Suckless' Coding Style](http://suckless.org/coding_style)
+6. [Idioms for C programmers](http://www.cs.tufts.edu/comp/40/idioms.html)
+7. [Linux kernel coding style](https://01.org/linuxgraphics/gfx-docs/drm/process/coding-style.html)
+
+### Addendum
+[C Humor](http://www.softpanorama.org/Lang/Cilorama/humor.shtml), because why
+not.
