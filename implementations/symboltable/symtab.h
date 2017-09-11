@@ -1,6 +1,3 @@
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 typedef struct Symtab Symtab;
 
 /* lookup with optional insertion */
@@ -13,5 +10,5 @@ int    contains(Symtab *table, char *key);
 Symtab *newsymboltable(void);
 void   freesymboltable(Symtab *table);
 
-typedef void (*symtabfnT)(char *key, void *value, void * clientData);
-void mapsymtab(symtabfnT fn, Symtab *table, void *clientData);
+typedef void (*symtabfn)(char *key, void *value, void * clientData);
+void mapsymtab(symtabfn fn, Symtab *table, void *clientData);

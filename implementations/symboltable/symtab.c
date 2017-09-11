@@ -1,10 +1,17 @@
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 #include "symtab.h"
 #include "../util.h"
 
-#define MULTIPLIER 31
-#define INIT_SIZE 1009	  /* Prime size */
+#define MULTIPLIER     31
 #define BALANCE_FACTOR 2.0
-#define RESIZE_FACTOR 2
+#define RESIZE_FACTOR  2
+
+/* Prime size */
+#define INIT_SIZE 1009
 
 typedef struct Node Node;
 struct Node{
@@ -21,11 +28,11 @@ struct Symtab{
 
 static void          expandtable(Symtab *table);
 static char          *clonekey(char *key);
-static Node          *findnode(Node *nodep, char *key);
-static void          freebucketchain(Node *nodep);
+static Node          *findnode(Node *np, char *key);
+static void          freebucketchain(Node *np);
 static void          freebuckets(Node **buckets, int size);
 static unsigned long hash(char *key, int nbuckets);
-static int           mustexpand(Symtab *table);
+static bool          mustexpand(Symtab *table);
 
 Symtab *
 newsymboltable(void){
@@ -118,16 +125,15 @@ lookup(Symtab *table, int insert, char *key, void *value){
 	return np;
 }
 
-/* Assumes int! Used for testing. 
+/* Assumes int! Used for testing.
  * To print, the symbol table should receive the printing
  * function of the value type
  */
 void
 print(Symtab *table){
-	unsigned int i;
 	Node *np;
 
-	for(i = 0; i < table->size; i++){
+	for(size_t i = 0; i < table->size; i++){
 		np = table->buckets[i];
 		while(np){
 			printf("%d\n", *(int *)np->value);
@@ -137,11 +143,10 @@ print(Symtab *table){
 }
 
 void
-mapsymtab(symtabfnT fn, Symtab *table, void *clientData){
+mapsymtab(symtabfn fn, Symtab *table, void *clientData){
 	unsigned int size = table->size;
-	unsigned int i;
 
-	for(i = 0; i < size; i++)
+	for(size_t i = 0; i < size; i++)
 		for(Node *np = table->buckets[i]; np; np = np->next)
 			fn(np->key, np->value, clientData);
 }
@@ -158,7 +163,7 @@ clonekey(char *key){
 
 static Node*
 findnode(Node *np, char *key){
-	while(np && strcmp(np->key, key))
+	while(np && strcmp(np->key, key) != 0)
 		np = np->next;
 
 	return np;
@@ -178,23 +183,22 @@ freebucketchain(Node *np){
 
 static unsigned long
 hash(char *key, int nbuckets){
-	unsigned long i;
 	unsigned long hashcode = 0;
 
-	for(i = 0; key[i] != '\0'; i++)
-		hashcode = hashcode * MULTIPLIER + key[i];
+	for( ; *key; key++)
+		hashcode = hashcode * MULTIPLIER + *key;
 
 	return hashcode % nbuckets;
 }
 
 static void
 freebuckets(Node **buckets, int size){
-	for(int i = 0; i < size; i++)
+	for(size_t i = 0; i < size; i++)
 		freebucketchain(buckets[i]);
 	free(buckets);
 }
 
-static int
+static bool
 mustexpand(Symtab *table){
 	return (double)table->entries / table->size > BALANCE_FACTOR;
 }
@@ -208,7 +212,7 @@ expandtable(Symtab *table){
 	table->buckets = xcalloc(table->size, sizeof(*table->buckets));
 	table->entries = 0L;
 
-	for(unsigned int i = 0; i < oldsize; i++){
+	for(size_t i = 0; i < oldsize; i++){
 		Node *np = oldbuckets[i];
 		while(np){
 			insert(table, np->key, np->value);

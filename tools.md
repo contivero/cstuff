@@ -1,10 +1,10 @@
 Tools
 ---
-The following notes follow heavily Ben Klemens' _21st Century C_.
-* [Make]()
-* [Debugging: GDB / LLDB]()
-* [Valgrind]()
-* [Documentation: Doxygen]()
+These notes mostly follow Ben Klemens' _21st Century C_.
+* [Make](#make)
+* [Debugging: GDB / LLDB](#)
+* [Valgrind](#valgrind)
+* [Documentation: Doxygen](#)
 
 ## Make
 
