@@ -1,5 +1,3 @@
-#include <stddef.h>
-
 #define NELEMS(array) (sizeof(array)/sizeof(array[0]))
 
 void *xmalloc(size_t size);

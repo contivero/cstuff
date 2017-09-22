@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "util.h"
 
 void *
@@ -31,7 +32,7 @@ xrealloc(void *p, size_t len) {
 	return p;
 }
 
-void
+_Noreturn void
 die(const char *errstr, ...) {
 	va_list ap;
 

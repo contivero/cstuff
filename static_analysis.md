@@ -1,6 +1,5 @@
 Notes on C Static Analysis Tools
 ===
-
 Summary of some free static analysis tools for C. Usage information lets one get
 started with the fast, but some of them provide a wide array of flags or
 options.
@@ -12,6 +11,9 @@ usage: `flawfinder <filename.c>`
 usage: `scan-build make`
 
 To force a rebuild, use: `scan-build make -B`
+
+### [Clang's clang-tidy](https://clang-analyzer.llvm.org/scan-build.html)
+usage: `clang-tidy <filename.c> -check="*"`
 
 ### [Sparse - Semantic Parser for C](https://sparse.wiki.kernel.org/index.php/Main_Page)
 Designed to find possible coding faults in the Linux kernel.
@@ -65,6 +67,8 @@ The compiler shouldn't be overlooked. My personal collection of flags is:
 -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wundef -Wuninitialized
 -Wunreachable-code -Wunused-macros -Werror
 ```
+These flags currently cover those [listed by the SEI CERT C Coding Standard](https://www.securecoding.cert.org/confluence/display/c/GCC)
+(those not listed are implied by `-Wall` or `-Wextra`).
 Note that [`-pedantic` was deprecated](https://gcc.gnu.org/gcc-4.8/changes.html)
 in favor of `-Wpedantic`.
 

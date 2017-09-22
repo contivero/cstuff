@@ -1,4 +1,4 @@
-#include <math.h> 
+#include <math.h>
 
 #define MAX(x,y,z) x > y? (x > z? x : z) : (y > z? y : z)
 
@@ -25,13 +25,13 @@ heapify(int *a, int i, int len){
 	l = left(i);
 	if(r > len && l > len)
 		return;
-	
+
 	if(a[r] > a[l])
 		m = r;
 	else
 		m = l;
 
-	if(a[i] == a[m])	
+	if(a[i] == a[m])
 		return;
 
 	temp = a[i];
@@ -44,26 +44,24 @@ heapify(int *a, int i, int len){
 void
 buildheap(int *a, int len){
 	int i;
-	
+
 	for(i = len / 2 - 1; i >= 0; i--)
 		heapify(a, i, len);
 }
 
 void
 heapsort(int *a, int len){
-	int temp;
-
-	for(; len; len--){
+	for( ; len; len--){
 		buildheap(a, len);
-		temp = a[0];
-		a[0] = a[len-1];
+		int temp = a[0];
+		a[0]     = a[len-1];
 		a[len-1] = temp;
 	}
 }
 
 int
 removefirst(int *a, int len){
-	
+
 }
 
 void

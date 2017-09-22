@@ -9,6 +9,8 @@ Below are notes on idioms, conventions, and general recommened practices for C
 programming (although many are applicable to other languages). Some stuff is
 taken almost verbatim from the references.
 
+For up-to-date treatments on modern C coding, refer to \[9,10,11\] (mostly the last 2).
+
 ## Notes on C - Idioms and conventions
 * [Names](#names)
 * [Macros](#macros)
@@ -19,7 +21,7 @@ taken almost verbatim from the references.
 * [Function prototypes](#function-prototypes)
 * [Concatenating string literals](#concatenating-string-literals)
 * [Iterating over lists](#iterating-over-lists)
-* [Never use gets()](#never-use-gets)
+* [Don't use deprecated, nor obscolecent functions](#never-use-gets)
 * [Unions for different interpretations of the same data](#unions-for-different-interpretations-of-the-same-data)
 * [Testing for null pointers](#testing-for-null-pointers)
 * [`enum` vs. `#define`](#enum-vs-define)
@@ -187,12 +189,16 @@ The pointer qualifier `*` should be with the variable, not the type.
 Type *p, *q; /* correct */
 ```
 
-#### Never use `gets()`
-There is no way to limit the amount of input `gets()` will read. It's an
-obsolete function, removed from C starting from C11,  and `fgets()` should be
-always used in it's place. Alternatively, C11 adds `gets_s` in its' Annex K, but
-it is optional (so C11 conforming platforms may not implement it), and the
-standard itself recommends sticking to `fgets()`.
+#### Don't use deprecated, nor obscolecent functions
+`gets()` is insecure because it is not possible to limit the amount of input it
+reads reads. The function is deprecated, and was removed from the standard
+starting from C11. `fgets()` should always be used in its' place. Alternatively,
+C11 adds `gets_s` in its' Annex K, but it is optional (so C11 conforming
+platforms may not implement it), and the standard itself recommends sticking to
+`fgets()`.
+
+Apart from that, several [other functions are obsolescent](https://www.securecoding.cert.org/confluence/display/c/MSC24-C.+Do+not+use+deprecated+or+obsolescent+functions)
+(as per the SEI CERT C Coding Standard). Refer to it for the complete list.
 
 #### Iterating over lists
 ```C
@@ -393,10 +399,10 @@ And then:
 5. [Suckless' Coding Style](http://suckless.org/coding_style)
 6. [Idioms for C programmers](http://www.cs.tufts.edu/comp/40/idioms.html)
 7. [Linux kernel coding style](https://01.org/linuxgraphics/gfx-docs/drm/process/coding-style.html)
-8. Jens Gustedt, Modern C
+8. [Steve Summit, comp.lang.c Frequently Asked Questions](http://c-faq.com)
 9. [Ben Klemens, 21st Century C: Tips from the New School (2nd Edition)](http://shop.oreilly.com/product/0636920033677.do)
-10. [Steve Summit, comp.lang.c Frequently Asked Questions](http://c-faq.com)
+10. Jens Gustedt, Modern C
+11. [SEI CERT C Coding Standard](https://www.securecoding.cert.org/confluence/display/c/SEI+CERT+C+Coding+Standard)
 
 ### Addendum
-[C Humor](http://www.softpanorama.org/Lang/Cilorama/humor.shtml), because why
-not.
+[C Humor](http://www.softpanorama.org/Lang/Cilorama/humor.shtml), because why not.

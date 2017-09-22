@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
+
 #include "stack.h"
 #include "../util.h"
 
@@ -52,7 +53,7 @@ stackpeek(Stack *s){
 	return s->element[s->count - 1];
 }
 
-bool
+inline bool
 stackisempty(Stack *s){
 	return s->count == 0;
 }

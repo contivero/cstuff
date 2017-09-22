@@ -1,47 +1,48 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "../util.h"
 
-typedef char * valueT;
-typedef char * keyT;
+/* Change these typedefs as appropriate */
+typedef char valueT;
+typedef char keyT;
 typedef struct Node Node;
 
 struct Node{
-	keyT key;
-	valueT value;
-	Node *left;
-	Node *right;
+	keyT   *key;
+	valueT *value;
+	Node   *left;
+	Node   *right;
 };
 
 typedef struct BST{
-	Node *root;
+	Node   *root;
 	size_t size;
 } BST;
 
 /* prototypes */
-BST    *newbst(void);
+BST    *newBST(void);
 void   freebst(BST *bst);
-valueT lookup(BST *bst, keyT key);
-void   insert(BST *bst, keyT key, valueT value);
-void   delete(BST *bst, keyT key);
+valueT *lookup(const BST *bst, const keyT *key);
+void   insert(BST *bst, const keyT *key, const valueT *value);
+void   delete(BST *bst, const keyT *key);
 
-static Node *newnode(const keyT key, const valueT value);
+static Node *newnode(const keyT *key, const valueT *value);
 static void freenode(Node *np);
 static void freerec(Node *np);
-static void deletenode(Node *np, Node *prev, int prevcmp);
 static void linkprevious(Node *prev, Node *next, int prevcmp);
 
 inline void
 linkprevious(Node *prev, Node *next, int prevcmp){
 	if(prevcmp < 0)
 		prev->left = next;
-	else 
+	else
 		prev->right = next;
 }
 
 BST *
-newbst(void){
+newBST(void){
 	BST *bst = xmalloc(sizeof(*bst));
 
 	bst->root = NULL;
@@ -51,7 +52,7 @@ newbst(void){
 }
 
 Node *
-newnode(const keyT key, const valueT value){
+newnode(const keyT *key, const valueT *value){
 	Node *np = xmalloc(sizeof(*np));
 
 	np->left  = NULL;
@@ -88,13 +89,12 @@ freebst(BST *bst){
 	free(bst);
 }
 
-valueT
-lookup(BST *bst, keyT key){
-	int cmp;
+valueT *
+lookup(const BST *bst, const keyT *key){
 	Node *np = bst->root;
 
 	while(np){
-		cmp = strcmp(key, np->key);
+		int cmp = strcmp(key, np->key);
 		if(cmp < 0)
 			np = np->left;
 		else if(cmp > 0)
@@ -107,7 +107,7 @@ lookup(BST *bst, keyT key){
 }
 
 void
-insert(BST *bst, keyT key, valueT value){
+insert(BST *bst, const keyT *key, const valueT *value){
 	int cmp;
 	Node *np = bst->root;
 
@@ -140,7 +140,7 @@ insert(BST *bst, keyT key, valueT value){
 }
 
 void
-delete(BST *bst, keyT key){
+delete(BST *bst, const keyT *key){
 	int cmp, prevcmp;
 	Node *prev = NULL;
 	Node *np = bst->root;
@@ -206,7 +206,7 @@ delete(BST *bst, keyT key){
 
 /* int */
 /* main(void){ */
-/* 	BST *bst = newbst(); */
+/* 	BST *bst = newBST(); */
 /* 	printf("%d\n", bst->size); */
 /* 	insert(bst, "3", "c"); */
 /* 	printf("%d\n", bst->size); */
