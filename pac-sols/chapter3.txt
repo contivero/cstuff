@@ -14,3 +14,93 @@
 3. In C, an interface is represented by a header file, which traditionally has
    the same name as the file that implements it with the .c extension replaced
    by .h
+
+4. The definitions exported by an interface are called interface entries.
+
+5. The five criteria for good interface designed listed in the chapter are:
+   Unified, Simple, Sufficient, General, Stable.
+
+6. Because making changes in the behavior of an interface forces clients to
+   change their programs, which compromises the value of the interface.
+
+7. Changing an interface in a way that requires no changes to existing programs
+   is called extending the interface.
+
+8. Comments provide all the information clients need. If the comments in an
+   interface are well designed, clients should be able to rely on them without
+   having to read the underlying implementation.
+
+9.
+
+10. #ifndef _magic_h
+    #define _magic_h
+    /* code here */
+    #endif
+
+    The purpose of this is to prevent the compiler from reading the same
+    interface many times during a single compilation.
+
+    Note: although this works and is the approach followed by the text, it can
+    lead to significant compilation times, and plan 9's approach of having
+    headers not import other headers, is preferable.
+
+11. Because computers are deterministic machines, so random numbers are usually
+    computed by going through a deterministic calculation that nontheless
+    appears random to the user. Thus, random numbers computed in this way are
+    called pseudorandom numbers.
+
+12. TODO
+
+13. No, because the function is called once, and that same value is assigned to
+    both the d1 and d2 variables.
+
+14. Because rand is deterministic, it produces each new random value by applying
+    a set of mathematical calculations to the last value it produced.
+
+15. Since each random value is calculated using the previous one, there must be
+    a starting point. The initial value used is called the seed for the random
+    number generator.
+
+16. Normalization: converting the integer result from rand into a floating-point
+                   number in the half-open interval [0,1)
+    Scaling: multiplying by (high - low + 1)
+    Truncation: converting the number back to an integer from a double
+    Translation: adding low
+
+    Thus, the code is:
+      double d = rand() / (RAND_MAX + 1.0);
+      return d * (high - low + 1) + low;
+
+17. In C, the end of a string is marked by storing the null character, the
+    character whose internal code is 0 and which is represented b the escape
+    sequence '\0'.
+
+18. The idiom is:
+      for (i = 0; srt[i] != '\0'; i++)
+        ;
+    Or, equivalently:
+      for (i = 0; srt[i]; i++)
+        ;
+    If we regard the string as a pointer to char:
+      for (p = srt; p; p++)
+        ;
+
+19. In the case of the strlib.h interface, the functions dynamically allocate
+    whatever memory is required, while in string.h, that burden is shifted to the
+    client.
+
+20. The comparison only checks if both variable are pointing to the same memory
+    location, it does not check string equality. For that, we can use the
+    function srtcmp.
+
+21. The second is the source, and the first is the destination. A good mnemonic
+    is thinking about it as variable assignment, as if instead of doing:
+      strcpy(dst, src);
+    we could just do:
+      dst = src;
+
+22. A buffer overflow is writing data past the end of a buffer.
+
+23. StringEqual(s1, s2) is the same as doing: strcmp(s1, s2) == 0;
+
+24.
