@@ -1,15 +1,16 @@
 #include <stdlib.h>
+#include <stdbool.h>
 #include "queue.h"
 #include "../util.h"
 
 typedef struct Node Node;
 struct Node {
-	queueElemT elem;
-	Node *next;
+	elemT elem;
+	Node  *next;
 };
 
 static Node *
-newnode(queueElemT elem) {
+newnode(elemT elem) {
 	Node *np = xmalloc(sizeof(*np));
 
 	np->elem = elem;
@@ -18,22 +19,24 @@ newnode(queueElemT elem) {
 }
 
 struct Queue {
-	Node *head;
-	Node *tail;
+	Node   *head;
+	Node   *tail;
+	size_t size;
 };
 
 Queue*
 newqueue(void) {
-	Queue *qp = xmalloc(sizeof(*qp));
-	qp->head = NULL;
-	return qp;
+	Queue *q = xmalloc(sizeof(*q));
+	q->head  = NULL;
+	q->size  = 0;
+	return q;
 }
 
 void
 freequeue(Queue *q){
-	Node *np, *next;
+	Node *next;
 
-	for(np = q->head; np; np = next){
+	for (Node *np = q->head; np; np = next){
 		next = np->next;
 		free(np);
 	}
@@ -41,23 +44,27 @@ freequeue(Queue *q){
 }
 
 void
-enqueue(Queue *q, queueElemT element){
+enqueue(Queue *q, elemT element){
 	Node *np = newnode(element);
 
-	if(!q->head)
+	if (!q->head)
 		q->head = np;
 	else
 		q->tail->next = np;
+
 	q->tail = np;
+	q->size++;
 }
 
-queueElemT
+elemT
 dequeue(Queue *q){
-	if(queueisempty(q))
+	if (queueisempty(q))
 		die("Cannot dequeue from an empty queue");
 
 	Node *np = q->head;
 	q->head  = q->head->next;
+	q->size--;
+
 	return np;
 }
 
@@ -71,13 +78,7 @@ queueisfull(Queue *q){
 	return false;
 }
 
-int
-queuelength(Queue *q){
-	Node *np;
-	int length = 0;
-
-	for(np = q->head; np; np = np->next)
-		length++;
-
-	return length;
+size_t
+queuesize(Queue *q){
+	return q->size;
 }

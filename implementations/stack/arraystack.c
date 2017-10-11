@@ -6,18 +6,20 @@
 
 /*
  * stack.h implementation using dynamically allocated arrays
+ * size and isempty are O(1). Pop and push too, with the exception of when the
+ * array used for the stack needs to be resized.
  */
 
 struct Stack {
-	dataT *element;
-	int    count;
-	int    size;
+	dataT  *element;
+	size_t count;    /* elements currently in the stack */
+	size_t size;     /* maximum stack size */
 };
 
-static void expandstack(Stack* stack);
+static void stackresize(Stack* stack, size_t sz);
 
 Stack *
-newstack(void){
+newstack(void) {
 	Stack *sp   = xmalloc(sizeof(*sp));
 	sp->element = xmalloc(sizeof((*(sp->element))) * INIT_SIZE);
 	sp->count   = 0;
@@ -26,39 +28,43 @@ newstack(void){
 }
 
 void
-freestack(Stack *s){
+freestack(Stack *s) {
 	free(s->element);
 	free(s);
 }
 
 void
-stackpush(Stack *s, dataT data){
-	if(s->count == s->size){
-		expandstack(s);
-	}
+stackpush(Stack *s, dataT data) {
+	if (s->count == s->size)
+		stackresize(s, s->size * 2);
+
 	s->element[s->count++] = data;
 }
 
 dataT
-stackpop(Stack *s){
-	if(stackisempty(s))
+stackpop(Stack *s) {
+	if (stackisempty(s))
 		die("Cannot pop an empty stack");
-	return s->element[--s->count];
+
+    dataT data = s->element[--s->count];
+    if (s->count > 0 && s->count == s->size/4)
+        stackresize(s, s->size/2);
+	return data;
 }
 
 dataT
-stackpeek(Stack *s){
-	if(stackisempty(s))
+stackpeek(Stack *s) {
+	if (stackisempty(s))
 		die("Cannot peek an empty stack");
 	return s->element[s->count - 1];
 }
 
 inline bool
-stackisempty(Stack *s){
+stackisempty(Stack *s) {
 	return s->count == 0;
 }
 
 static void
-expandstack(Stack *s){
-	s->element = xrealloc(s, sizeof((*(s->element))) * s->size * 2);
+stackresize(Stack *s, size_t sz) {
+	s->element = xrealloc(s->element, sizeof((*(s->element))) * sz);
 }

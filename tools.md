@@ -40,3 +40,7 @@ To check for memory leaks: `valgrind --leak-check=full program_name`.
 To start the debugger at a first error: `valgrind --db-attach=yes program_name`.
 ## Documentation: Doxygen
 
+## Clang Format
+A file called `.clang-format` can be used to hold a custom configuration.
+
+To format a file: `clang-format <filename>`

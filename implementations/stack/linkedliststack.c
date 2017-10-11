@@ -5,31 +5,34 @@
 
 /*
  * stack.h implementation using a linked list.
+ * push, pop, size, and isempty all O(1)
  */
 
 typedef struct Node Node;
 struct Node{
 	dataT data;
-	Node *next;
+	Node  *next;
 };
 
 struct Stack{
-	Node *top;
+	Node   *top;
+    size_t size;
 };
 
 Stack *
-newstack(){
+newstack() {
 	Stack *sp = xmalloc(sizeof(*sp));
 	sp->top   = NULL;
+	sp->size  = 0;
 	return sp;
 }
 
 void
-freestack(Stack *s){
+freestack(Stack *s) {
 	Node *next;
 	Node *np = s->top;
 
-	while(np){
+	while (np) {
 		next = np->next;
 		free(np);
 		np = next;
@@ -38,36 +41,43 @@ freestack(Stack *s){
 }
 
 void
-stackpush(Stack *s, dataT data){
+stackpush(Stack *s, dataT data) {
 	Node *np = xmalloc(sizeof(*np));
+
 	np->data = data;
 	np->next = s->top;
 	s->top   = np;
+    s->size++;
 }
 
 dataT
-stackpop(Stack *s){
-	Node *np;
-	dataT data;
-
-	if(stackisempty(s))
+stackpop(Stack *s) {
+	if (stackisempty(s))
 		die("Cannot pop an empty stack");
 
-	np     = s->top;
-	data   = np->data;
-	s->top = s->top->next;
+	Node *np   = s->top;
+	dataT data = np->data;
+	s->top     = s->top->next;
+    s->size++;
 	free(np);
+
 	return data;
 }
 
 dataT
-stackpeek(Stack *s){
-	if(stackisempty(s))
+stackpeek(Stack *s) {
+	if (stackisempty(s))
 		die("Cannot pop an empty stack");
+
 	return s->top->data;
 }
 
+size_t
+stacksize(Stack *s) {
+    return s->size;
+}
+
 bool
-stackisempty(Stack* s){
-	s->top == NULL;
+stackisempty(Stack *s) {
+	s->top == 0;
 }

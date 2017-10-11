@@ -8,4 +8,5 @@ void   freestack(Stack *stack);
 void   stackpush(Stack *stack, dataT data);
 dataT  stackpop(Stack *stack);
 dataT  stackpeek(Stack *stack);
+size_t stacksize(Stack *stack);
 bool   stackisempty(Stack *stack);

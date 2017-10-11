@@ -8,7 +8,7 @@ void *
 xmalloc(size_t size) {
 	void *p = malloc(size);
 
-	if(!p)
+	if (!p)
 		die("Out of memory: could not malloc() %d bytes\n", size);
 
 	return p;
@@ -18,7 +18,7 @@ void *
 xcalloc(size_t nmemb, size_t size) {
 	void *p = calloc(nmemb, size);
 
-	if(!p)
+	if (!p)
 		die("Out of memory: could not calloc() %d bytes\n", nmemb*size);
 
 	return p;
@@ -26,7 +26,7 @@ xcalloc(size_t nmemb, size_t size) {
 
 void *
 xrealloc(void *p, size_t len) {
-	if((p = realloc(p, len)) == NULL)
+	if ((p = realloc(p, len)) == NULL)
 		die("Out of memory: could not realloc() %d bytes\n", len);
 
 	return p;
@@ -59,7 +59,7 @@ warn(const char *warnstr, ...){
  */
 #define CHECK(LINE, EXPECTED_VALUE)	 \
   { int rc = LINE;					  \
-	if(rc != EXPECTED_VALUE)			\
+	if (rc != EXPECTED_VALUE)			\
 		ut_abort(__FILE__, __LINE__, #LINE, rc, EXPECTED_VALUE); }
 
 void

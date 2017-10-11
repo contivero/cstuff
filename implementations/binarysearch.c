@@ -9,9 +9,9 @@ binsearch(int a[], int key, unsigned int low, unsigned int high){
 		int mid    = (low + high) >> 1;
 		int midval = a[mid];
 
-		if(key < midval)
+		if (key < midval)
 			high = mid - 1;
-		else if(key > midval)
+		else if (key > midval)
 			low = mid + 1;
 		else
 			return mid;
