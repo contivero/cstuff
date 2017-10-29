@@ -103,4 +103,8 @@
 
 23. StringEqual(s1, s2) is the same as doing: strcmp(s1, s2) == 0;
 
-24.
+24. a. 5         f. "2"
+    b. 0         g. "ABCD"
+    c. 1         h. ""
+    d. C         i. "DE"
+    e. 12.00     j. "D"

@@ -9,7 +9,7 @@
  * It leaves an empty slot to distinguish between the empty and full states. *
  *                                                                           *
  * All functions are O(1).                                                   *
- ****************************************************************************/
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -20,7 +20,7 @@
 #define QUEUE_ARRAY_SIZE  (QUEUE_SIZE + 1)
 
 struct Queue {
-	elemT  buffer[QUEUE_SIZE];
+	elemT  buffer[QUEUE_ARRAY_SIZE];
 	size_t head;
 	size_t tail;
 };
