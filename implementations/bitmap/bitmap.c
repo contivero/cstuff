@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include "util.h"
 
-/* Loosly based on Eric S. Roberts' characteristic vectors
+/* Loosely based on Eric S. Roberts' characteristic vectors
  * Set union, intersection, difference and complement are also implemented.
  */
 
@@ -25,7 +25,6 @@ newbitmap(void) {
 inline unsigned long
 mask(size_t k) {
     return (unsigned long) 1 << (k % BITS_PER_UL);
-
 }
 
 bool
