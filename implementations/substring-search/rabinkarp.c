@@ -11,63 +11,62 @@ typedef struct RabinKarp {
 	char *pattern; /* only needed for Las Vegas comparison */
 	long pathash;  /* pattern hash */
 	long Q;        /* large prime */
-	int M;         /* pattern length */
-	int R;         /* alphabet size */
-	long RM;       /* R^(M-1) % Q */
+	int  patlen;   /* pattern length */
+	int  alphsize; /* alphabet size */
+	long RM;       /* alphsize^(patlen-1) % Q */
 } RK;
 
 long
-randomprime(void){
+randomprime(void) {
 	return 101; /* TODO implement! */
 }
 
 RK *
-newRK(char *pat, int patlen){
+newRK(char *pat, int patlen) {
 	RK *rk = xmalloc(sizeof(*rk));
-	rk->pattern = pat;
-	rk->M  = patlen;
-	rk->R  = ALPHABET_SIZE;
-	rk->Q  = randomprime();
-	rk->RM = 1;
+	rk->pattern  = pat;
+	rk->patlen   = patlen;
+	rk->alphsize = ALPHABET_SIZE;
+	rk->Q        = randomprime();
+	rk->RM       = 1;
 
 	return rk;
 }
 
 void
-freeRK(RK *rk){
+freeRK(RK *rk) {
 	free(rk);
 }
 
 long
-rkhash(char *key, long Q, int M, int R){
+rkhash(char *key, long Q, int patlen, int alphsize) {
 	long h = 0; 
-	int j;
 
-	for(j = 0; j < M; j++)
-		h = (R*h + key[j]) % Q;
+	for (size_t j = 0; j < patlen; j++)
+		h = (alphsize*h + key[j]) % Q;
 
 	return h;
 }
 
 int
-rksearch(RK *rk, char *txt, int txtlen){
-	long thash = rkhash(txt, rk->Q, rk->M, rk->R);
-	long phash = rk->pathash;
-	long RM = rk->R;
-	long Q  = rk->Q;
-	int  M  = rk->M;
-	int  R  = rk->R;
+rksearch(RK *rk, char *txt, int txtlen) {
+	long thash    = rkhash(txt, rk->Q, rk->patlen, rk->alphsize);
+	long phash    = rk->pathash;
+	long RM       = rk->alphsize;
+	long Q        = rk->Q;
+	int  patlen   = rk->patlen;
+	int  alphsize = rk->alphsize;
 	int i;
 
-	if(phash == thash && strncmp(txt, rk->pattern, rk->M) == 0)
+	if (phash == thash && strncmp(txt, rk->pattern, rk->patlen) == 0)
 		return 0;
 
-	for(i = M; i < txtlen; i++){
+	for (i = patlen; i < txtlen; i++) {
 		/* remove leading digit, add trailing digit, check for match */
-		thash = (thash + Q - RM*txt[i-M] % Q) % Q;
-		thash = (thash*R + txt[i]) % Q;
-		if(phash == thash && strncmp(txt + i-M+1, rk->pattern, rk->M == 0))
-			return i - M + 1;
+		thash = (thash + Q - RM*txt[i-patlen] % Q) % Q;
+		thash = (thash*alphsize + txt[i]) % Q;
+		if (phash == thash && strncmp(txt + i-patlen+1, rk->pattern, rk->patlen == 0))
+			return i - patlen + 1;
 	}
 
 	return txtlen;

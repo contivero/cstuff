@@ -4,7 +4,7 @@
 jmp_buf buf;
 
 void
-banana(){
+banana(void) {
     printf("in banana()\n");
     longjmp(buf, 1);
     /*NOT REACHED */
@@ -12,12 +12,11 @@ banana(){
 }
 
 int
-main(void){
-    if(setjmp(buf))
+main(void) {
+    if (setjmp(buf))
         printf("back in main\n");
     else {
         printf("first time through\n");
         banana();
     }
-    return 0;
 }

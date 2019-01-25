@@ -5,7 +5,7 @@
 
 int
 binsearch(int a[], int key, unsigned int low, unsigned int high){
-	while(low <= high){
+	while (low <= high) {
 		int mid    = (low + high) >> 1;
 		int midval = a[mid];
 
